@@ -1,8 +1,10 @@
-# Zeus' Enhanced Vita Snooper
+# Zeus' Enhanced VPad Snooper
 
 A simple homebrew for testing the input data on the PS Vita™ made on [Lua Player Plus Vita](https://github.com/Rinnegatamante/lpp-vita)
 
 Originally created by Smoke5, converted to Lua by Keinta15
+
+![preview](D:\ZeusOfTheCrows\My Files\LocalDev\VPad-Tester\img\preview.png)
 
 ### Features:
 
@@ -40,7 +42,6 @@ lua player plus' builder is included in .\lpp - read the readme in there, or jus
 
 - [Rinnegatamante](https://github.com/Rinnegatamante) for [lpp-vita](https://github.com/Rinnegatamante/lpp-vita)
 - [xerpi](https://github.com/xerpi) for [vita2dlib](https://github.com/xerpi/vita2dlib)
-- ~[UrielTapia97](https://twitter.com/UrielTapia97) for the images and icons used in this homebrew~
 - [tokyoship](https://commons.wikimedia.org/wiki/User:Tokyoship) for the [vita wireframe](https://commons.wikimedia.org/wiki/File:PlayStation_Vita_Layout.svg) (CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0))
 - [remix icons](https://remixicon.com/) for the fingerprint icon
 - [Ruben_Wolfe451](https://twitter.com/Ruben_Wolfe451)
