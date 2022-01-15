@@ -1,5 +1,6 @@
 -- ztoto: inverted flat buttons
 -- ztodo: pull out draw()
+-- ztodo: fingerprint icon
 -------------------------------------------------------------------------------
 --  Zeus' Enhanced Vita Snooper by ZeusOfTheCrows, based on work by Keinta15 --
 --                        Original work by Smoke5                            --
@@ -14,6 +15,7 @@ orange = Color.new(254, 128, 025, 255)
 red    = Color.new(204, 036, 029, 255)
 green  = Color.new(152, 151, 026, 255)
 grey   = Color.new(189, 174, 147, 255)
+black  = Color.new(040, 040, 040, 255)
 
 -- init images
 bgimg       = Graphics.loadImage("app0:/resources/img/bgd.png")
@@ -141,10 +143,10 @@ while true do
 		soundTest()
 	end
 
-	--  Controls to exit app
-	--if Controls.check(pad, start) and Controls.check(pad, select) then
-		--System.exit()
-	--end
+	-- Controls to exit app
+	if Controls.check(pad, start) and Controls.check(pad, select) then
+		System.exit()
+	end
 
 	-- ui
 	-- Starting drawing phase
@@ -152,8 +154,7 @@ while true do
 	Screen.clear()
 
 	-- programmatically colour background
-	Graphics.fillRect(0, 960, 0, 544, Color.new(40, 40, 40)) -- why no?
-	-- Graphics.fillRect(20, 50, 100, 400, Color.new(255, 0, 255)) -- why no?
+	Graphics.fillRect(0, 960, 0, 544, black)
 	Graphics.drawImage(0, 40, bgimg)
 
 	--  Display info
@@ -170,12 +171,12 @@ while true do
 
 	--- checks for input
 	-- Draw and move left analog stick on screen
-	-- Graphics.drawImage((71 + lx / 8), (257 + ly / 8), analogueimg)
-	Graphics.drawImage((88), (270), analogueimg)
+	Graphics.drawImage((74 + lx / 8), (254 + ly / 8), analogueimg)
+	-- Graphics.drawImage((90), (270), analogueimg)
 
 	-- Draw and move right analog on screen
-	-- Graphics.drawImage((787 + rx / 8), (257 + ry / 8), analogueimg)
-	Graphics.drawImage((812), (270), analogueimg)
+	Graphics.drawImage((794 + rx / 8), (254 + ry / 8), analogueimg)
+	-- Graphics.drawImage((810), (270), analogueimg)
 
 	--  Draw circle button if pressed
 	if Controls.check(pad, circle) then
@@ -195,15 +196,15 @@ while true do
 	end
 	--  Draw select button if pressed
 	if Controls.check(pad, select) then
-		Graphics.drawImage(810, 385, sttselctimg)
+		Graphics.drawImage(807, 378, sttselctimg)
 	end
 	--  Draw start button if pressed
 	if Controls.check(pad, start) then
-		Graphics.drawImage(860, 385, sttselctimg)
+		Graphics.drawImage(858, 378, sttselctimg)
 	end
 	--  Draw home button if pressed ztodo
-	if true then
-		Graphics.drawImage(090, 377, homeimg)
+	if Controls.check(pad, start) then
+		Graphics.drawImage(087, 376, homeimg)
 	end
 	--  Draw left trigger button if pressed
 	if Controls.check(pad, ltrigger) then
@@ -217,25 +218,25 @@ while true do
 	end
 	--  Draw up directional button if pressed   x113, y91
 	if Controls.check(pad, up) then
-		Graphics.drawImage(75, 134, upimg)
+		Graphics.drawImage(77, 134, upimg)
 	end
 	--  Draw down directional button if pressed
 	if Controls.check(pad, down) then
 		--Graphics.drawRotateImage(94, 231, dpad, 3.14)
 		-- couldn't make the intergers to work? I may be dumb
-		Graphics.drawImage(75, 192, downimg)
+		Graphics.drawImage(77, 193, downimg)
 	end
 	--  Draw left directional button if pressed
 	if Controls.check(pad, left) then
 		--Graphics.drawRotateImage(65, 203, dpad, -1.57)
 		-- couldn't make the intergers to work
-		Graphics.drawImage(41, 167, leftimg)
+		Graphics.drawImage(44, 167, leftimg)
 	end
 	--  Draw right directional button if pressed
 	if Controls.check(pad, right) then
 		--Graphics.drawRotateImage(123, 203, dpad, 1.57)
 		-- couldn't make the intergers to work
-		Graphics.drawImage(99, 167, rightimg)
+		Graphics.drawImage(103, 167, rightimg)
 	end
 
 	--  Draw front touch on screen
