@@ -57,12 +57,10 @@ left = SCE_CTRL_LEFT
 right = SCE_CTRL_RIGHT
 
 -- init num vars to zero (to avoid nil)
--- ztodo: do this for touch also
 lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
 lxmax, lymax, rxmax, rymax = 0.0, 0.0, 0.0, 0.0
 
 -- func for padding numbers - to avoid jumping text
--- ztodo load monospace font
 lPad = function(str, len, char)
 	-- default arguments
 	len = len or 5 -- 5 because of decimal point
@@ -154,79 +152,78 @@ while true do
 	Screen.clear()
 
 	--  Display background
-	Graphics.drawImage(0, 54, bg)
+	Graphics.drawImage(0, 44, bg)
 
 	--  Display info
-	Font.print(varwFont, 10, 10, "Lua Vita Tester v1.2.0 by ZeusOfTheCrows, " ..
+	Font.print(varwFont, 010, 010, "Lua Vita Tester v1.2.0 by ZeusOfTheCrows, " ..
 		                          "based on work by Keinta15", orange)
-	Font.print(varwFont, 160, 90, "Press Start + Select to exit", white)
-	Font.print(varwFont, 160, 110, "Press L + R to reset max stick range", white)
-	Font.print(varwFont, 160, 130, "Press X and O for Sound Test", white)
-	-- Font.print(font, 770, 505, "Right: " .. rx .. ", " .. ry, white)
-	Font.print(monoFont, 10, 505,  lPad(lx) .. ", " .. lPad(ly) ..
-	                   " (" .. lPad(lxmax) .. ", " .. lPad(lymax) .. ")", white)
-	Font.print(monoFont, 640, 505, lPad(rx) .. ", " .. lPad(ry) ..
-		                " (" .. lPad(rxmax) .. ", " .. lPad(rymax) .. ")", white)
-	Font.print(varwFont, 720, 90, battcondition .. battpercent .. "%", battcondcolr)
+	Font.print(varwFont, 195, 080, "Press Start + Select to exit", grey)
+	Font.print(varwFont, 195, 105, "Press L + R to reset max stick range", grey)
+	Font.print(varwFont, 195, 130, "Press X and O for Sound Test", grey)
+	Font.print(monoFont, 700, 080, battcondition .. battpercent .. "%", battcondcolr)
+	Font.print(monoFont, 010, 480,  "Left: " .. lPad(lx) .. ", " .. lPad(ly) ..
+	              "\nMax:  " .. lPad(lxmax) .. ", " .. lPad(lymax), white)
+	Font.print(monoFont, 670, 482, "Right: " .. lPad(rx) .. ", " .. lPad(ry) ..
+		          "\nMax:   " .. lPad(rxmax) .. ", " .. lPad(rymax), white)
 	Screen.flip()
 
-	--  checks for button input
-	--  Draw and move left analog stick on screen
-	Graphics.drawImage((71 + lx / 8), (267 + ly / 8), analog)
+	--- checks for input
+	-- Draw and move left analog stick on screen
+	Graphics.drawImage((71 + lx / 8), (257 + ly / 8), analog)
 
 	--  Draw and move right analog on screen
-	Graphics.drawImage((787 + rx / 8), (267 + ry / 8), analog)
+	Graphics.drawImage((787 + rx / 8), (257 + ry / 8), analog)
 
 	--  Draw cross button if pressed
 	if Controls.check(pad, cross) then
-		Graphics.drawImage(830, 202, crossimg)
+		Graphics.drawImage(829, 192, crossimg)
 	end
 	--  Draw square button if pressed
 	if Controls.check(pad, square) then
-		Graphics.drawImage(790, 165, squareimg)
+		Graphics.drawImage(791, 155, squareimg)
 	end
 	--  Draw circle button if pressed
 	if Controls.check(pad, circle) then
-		Graphics.drawImage(869, 165, circleimg)
+		Graphics.drawImage(869, 155, circleimg)
 	end
 	--  Draw triangle button if pressed
 	if Controls.check(pad, triangle) then
-		Graphics.drawImage(830, 127, triangleimg)
-	end
-	--  Draw start button if pressed
-	if Controls.check(pad, start) then
-		Graphics.drawImage(841, 373, startimg)
+		Graphics.drawImage(830, 117, triangleimg)
 	end
 	--  Draw select button if pressed
 	if Controls.check(pad, select) then
-		Graphics.drawImage(781, 375, selectimg)
+		Graphics.drawImage(781, 366, selectimg)
+	end
+	--  Draw start button if pressed
+	if Controls.check(pad, start) then
+		Graphics.drawImage(841, 364, startimg)
 	end
 	--  Draw right trigger button if pressed
 	if Controls.check(pad, rtrigger) then
-		Graphics.drawImage(720, 40, rtriggerimg)
+		Graphics.drawImage(720, 30, rtriggerimg)
 	end
 	--  Draw left trigger button if pressed
 	if Controls.check(pad, ltrigger) then
-		Graphics.drawImage(38, 40, ltriggerimg)
+		Graphics.drawImage(38, 30, ltriggerimg)
 	end
 	--  Draw up directional button if pressed   x113, y91
 	if Controls.check(pad, up) then
-		Graphics.drawImage(59, 134, dpad)
+		Graphics.drawImage(59, 124, dpad)
 	end
 	--  Draw down directional button if pressed
 	if Controls.check(pad, down) then
 		--Graphics.drawRotateImage(94, 231, dpad, 3.14) couldn't make the intergers to work? I may be dumb
-		Graphics.drawImage(59, 190, downimg)
+		Graphics.drawImage(59, 180, downimg)
 	end
 	--  Draw left directional button if pressed
 	if Controls.check(pad, left) then
 		--Graphics.drawRotateImage(65, 203, dpad, -1.57) couldn't make the intergers to work
-		Graphics.drawImage(25, 167, leftimg)
+		Graphics.drawImage(25, 157, leftimg)
 	end
 	--  Draw right directional button if pressed
 	if Controls.check(pad, right) then
 		--Graphics.drawRotateImage(123, 203, dpad, 1.57) couldn't make the intergers to work
-		Graphics.drawImage(83, 167, rightimg)
+		Graphics.drawImage(83, 157, rightimg)
 	end
 
 	--  Draw front touch on screen
