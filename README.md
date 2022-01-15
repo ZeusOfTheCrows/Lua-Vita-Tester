@@ -9,11 +9,12 @@ This project was done mainly for self learning purposes.
 could convert it over to Lua Player Plus Vita for PS Vita made by: Rinnegatamante
 since I'm still learning and it was made as a fun learning experience. 
 
-![max range logic](./.github/max-logic-pic.png)
+![max range logic](./img/max-logic-pic.png)
 
 ## Credits to:
 
 - Original VitaTester [SMOKE5](https://github.com/SMOKE5) for [VitaTester](https://github.com/SMOKE5/VitaTester)
+- Conversion to Lua [Keinta15](https://github.com/Keinta15/) for [Lua Vita Tester](https://github.com/Keinta15/Lua-Vita-Tester)
 
 ## Extra Credits
 
