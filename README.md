@@ -9,6 +9,7 @@ This project was done mainly for self learning purposes.
 could convert it over to Lua Player Plus Vita for PS Vita made by: Rinnegatamante
 since I'm still learning and it was made as a fun learning experience. 
 
+![max range logic](./.github/max-logic-pic.png)
 
 ## Credits to:
 
