@@ -1,4 +1,5 @@
 -- ztoto: inverted flat buttons
+-- ztodo: pull out draw()
 -------------------------------------------------------------------------------
 --  Zeus' Enhanced Vita Snooper by ZeusOfTheCrows, based on work by Keinta15 --
 --                        Original work by Smoke5                            --
@@ -20,8 +21,8 @@ crossimg    = Graphics.loadImage("app0:/resources/img/crs.png")
 squareimg   = Graphics.loadImage("app0:/resources/img/sqr.png")
 circleimg   = Graphics.loadImage("app0:/resources/img/ccl.png")
 triangleimg = Graphics.loadImage("app0:/resources/img/tri.png")
-startimg    = Graphics.loadImage("app0:/resources/img/stt.png")
-selectimg   = Graphics.loadImage("app0:/resources/img/slc.png")
+sttselctimg = Graphics.loadImage("app0:/resources/img/ssl.png")
+homeimg     = Graphics.loadImage("app0:/resources/img/hom.png")
 rtriggerimg = Graphics.loadImage("app0:/resources/img/rtr.png")
 ltriggerimg = Graphics.loadImage("app0:/resources/img/ltr.png")
 upimg       = Graphics.loadImage("app0:/resources/img/dup.png")
@@ -141,25 +142,26 @@ while true do
 	end
 
 	--  Controls to exit app
-	if Controls.check(pad, start) and Controls.check(pad, select) then
-		System.exit()
-	end
+	--if Controls.check(pad, start) and Controls.check(pad, select) then
+		--System.exit()
+	--end
 
 	-- ui
 	-- Starting drawing phase
 	Graphics.initBlend()
 	Screen.clear()
 
-	--  Display background
-	Graphics.fillRect(0, 0, 960, 544, Color.new(40, 40, 40, 255))
+	-- programmatically colour background
+	Graphics.fillRect(0, 960, 0, 544, Color.new(40, 40, 40)) -- why no?
+	-- Graphics.fillRect(20, 50, 100, 400, Color.new(255, 0, 255)) -- why no?
 	Graphics.drawImage(0, 40, bgimg)
 
 	--  Display info
-	Font.print(varwFont, 010, 010, "Enhanced VPad Snooper v1.2.0 by ZeusOfTheCrows", orange)
-	Font.print(varwFont, 200, 080, "Press Start + Select to exit", grey)
-	Font.print(varwFont, 200, 105, "Press L + R to reset max stick range", grey)
-	Font.print(varwFont, 200, 130, "Press X and O for Sound Test", grey)
-	Font.print(monoFont, 710, 080,  battpercent .. "%", battcolr)
+	Font.print(varwFont, 008, 008, "Enhanced VPad Snooper v1.2.0 by ZeusOfTheCrows", orange)
+	Font.print(varwFont, 205, 078, "Press Start + Select to exit", grey)
+	Font.print(varwFont, 205, 103, "Press L + R to reset max stick range", grey)
+	Font.print(varwFont, 205, 128, "Press X and O for Sound Test", grey)
+	Font.print(monoFont, 720, 078,  battpercent .. "%", battcolr)
 	Font.print(monoFont, 010, 480,  "Left: " .. lPad(lx) .. ", " .. lPad(ly) ..
 	              "\nMax:  " .. lPad(lxmax) .. ", " .. lPad(lymax), white)
 	Font.print(monoFont, 670, 482, "Right: " .. lPad(rx) .. ", " .. lPad(ry) ..
@@ -168,64 +170,72 @@ while true do
 
 	--- checks for input
 	-- Draw and move left analog stick on screen
-	Graphics.drawImage((71 + lx / 8), (257 + ly / 8), analogueimg)
+	-- Graphics.drawImage((71 + lx / 8), (257 + ly / 8), analogueimg)
+	Graphics.drawImage((88), (270), analogueimg)
 
-	--  Draw and move right analog on screen
-	Graphics.drawImage((787 + rx / 8), (257 + ry / 8), analogueimg)
+	-- Draw and move right analog on screen
+	-- Graphics.drawImage((787 + rx / 8), (257 + ry / 8), analogueimg)
+	Graphics.drawImage((812), (270), analogueimg)
 
-	--  Draw cross button if pressed
-	if Controls.check(pad, cross) then
-		Graphics.drawImage(829, 192, crossimg)
-	end
-	--  Draw square button if pressed
-	if Controls.check(pad, square) then
-		Graphics.drawImage(791, 155, squareimg)
-	end
 	--  Draw circle button if pressed
 	if Controls.check(pad, circle) then
-		Graphics.drawImage(869, 155, circleimg)
+		Graphics.drawImage(888, 169, circleimg)
+	end
+	--  Draw cross button if pressed
+	if Controls.check(pad, cross) then
+		Graphics.drawImage(849, 207, crossimg)
 	end
 	--  Draw triangle button if pressed
 	if Controls.check(pad, triangle) then
-		Graphics.drawImage(830, 117, triangleimg)
+		Graphics.drawImage(849, 130, triangleimg)
+	end
+	--  Draw square button if pressed
+	if Controls.check(pad, square) then
+		Graphics.drawImage(812, 169, squareimg)
 	end
 	--  Draw select button if pressed
 	if Controls.check(pad, select) then
-		Graphics.drawImage(781, 366, selectimg)
+		Graphics.drawImage(810, 385, sttselctimg)
 	end
 	--  Draw start button if pressed
 	if Controls.check(pad, start) then
-		Graphics.drawImage(841, 364, startimg)
+		Graphics.drawImage(860, 385, sttselctimg)
 	end
-	--  Draw right trigger button if pressed
-	if Controls.check(pad, rtrigger) then
-		Graphics.drawImage(720, 30, rtriggerimg)
+	--  Draw home button if pressed ztodo
+	if true then
+		Graphics.drawImage(090, 377, homeimg)
 	end
 	--  Draw left trigger button if pressed
 	if Controls.check(pad, ltrigger) then
-		Graphics.drawImage(38, 30, ltriggerimg)
+		-- Graphics.drawImage(38, 30, ltriggerimg)
+		Graphics.drawImage(68, 43, ltriggerimg)
+	end
+	--  Draw right trigger button if pressed
+	if Controls.check(pad, rtrigger) then
+		-- Graphics.drawImage(720, 30, rtriggerimg)
+		Graphics.drawImage(775, 43, rtriggerimg)
 	end
 	--  Draw up directional button if pressed   x113, y91
 	if Controls.check(pad, up) then
-		Graphics.drawImage(59, 124, dpad)
+		Graphics.drawImage(75, 134, upimg)
 	end
 	--  Draw down directional button if pressed
 	if Controls.check(pad, down) then
 		--Graphics.drawRotateImage(94, 231, dpad, 3.14)
 		-- couldn't make the intergers to work? I may be dumb
-		Graphics.drawImage(59, 180, downimg)
+		Graphics.drawImage(75, 192, downimg)
 	end
 	--  Draw left directional button if pressed
 	if Controls.check(pad, left) then
 		--Graphics.drawRotateImage(65, 203, dpad, -1.57)
 		-- couldn't make the intergers to work
-		Graphics.drawImage(25, 157, leftimg)
+		Graphics.drawImage(41, 167, leftimg)
 	end
 	--  Draw right directional button if pressed
 	if Controls.check(pad, right) then
 		--Graphics.drawRotateImage(123, 203, dpad, 1.57)
 		-- couldn't make the intergers to work
-		Graphics.drawImage(83, 157, rightimg)
+		Graphics.drawImage(99, 167, rightimg)
 	end
 
 	--  Draw front touch on screen
@@ -250,7 +260,7 @@ while true do
 
 	-- -50 and -56.5 added because image wasn't placed under finger
 
-	--  Draw front touch on screen
+	--  Draw rear touch on screen
 	if rtx1 ~= nil then
 		Graphics.drawImage(rtx1- 50,rty1- 113, backTouch)
 	end
