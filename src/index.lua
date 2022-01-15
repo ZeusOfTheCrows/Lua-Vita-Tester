@@ -1,4 +1,3 @@
--- ztoto: inverted flat buttons
 -- ztodo: pull out draw()
 -- ztodo: fingerprint icon
 -------------------------------------------------------------------------------
@@ -64,8 +63,10 @@ right = SCE_CTRL_RIGHT
 lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
 lxmax, lymax, rxmax, rymax = 0.0, 0.0, 0.0, 0.0
 
+------------------------------ mini functions ---------------------------------
+
 -- func for padding numbers - to avoid jumping text
-lPad = function(str, len, char)
+function lPad(str, len, char)
 	-- default arguments
 	len = len or 5 -- 5 because of decimal point
 	char = char or "0"
@@ -75,7 +76,7 @@ lPad = function(str, len, char)
 end
 
 -- func for calculating "max" of stick range from 0
-calcMax = function(currNum, currMax)
+function calcMax(currNum, currMax)
 	num = math.abs(currNum - 127)
 	max = math.abs(currMax)
 	if num > max then
@@ -85,6 +86,7 @@ calcMax = function(currNum, currMax)
 	end
 end
 
+-- plays sound (i think)
 function soundTest()
 	for s=1,2 do
 		if hsnd1[s]==nil then
@@ -93,6 +95,11 @@ function soundTest()
 			break
 		end
 	end
+end
+
+----------------------------proper functions ----------------------------------
+function drawFunc()
+	do end
 end
 
 -- main loop
