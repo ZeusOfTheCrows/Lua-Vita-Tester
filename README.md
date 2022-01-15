@@ -1,15 +1,32 @@
-Lua Vita Tester
-==================
+# Zeus' Enhanced Vita Snooper†
 
 A simple homebrew for testing the input data on the PS Vita™ made on [Lua Player Plus Vita](https://github.com/Rinnegatamante/lpp-vita)
 
-This is a fork of SMOKE5's [VitaTester](https://github.com/SMOKE5/VitaTester)    
-This project was done mainly for self learning purposes.
-**At no point am I claiming this as mine,** this was just made to test myself that I 
-could convert it over to Lua Player Plus Vita for PS Vita made by: Rinnegatamante
-since I'm still learning and it was made as a fun learning experience. 
+Originally created by Smoke5, converted to Lua by Keinta15
+
+### Features:
+
+(most of it's not my work, i just added features (in bold) that i was missing)
+
+* highlight currently pressed buttons
+* visual feedback & absolute numbers of analogue stick input
+* visual feedback of touchscreen/touchpad, including multitouch
+* **max range of analogue stick input (useful for adjusting deadzones)**
+* stereo audio tester
+
+### Dev Miscellany:
+
+#### Building:
+
+lua player plus' builder is included in .\lpp - read the readme in there, or just run zbuild.bat
+
+* i've modified build.bat to zbuild.bat because i'm lazy
+	* use the original if you want to change the name/id
+* this is how i visualise stick range
 
 ![max range logic](./img/max-logic-pic.png)
+
+---
 
 ## Credits to:
 
@@ -22,3 +39,7 @@ since I'm still learning and it was made as a fun learning experience.
 - [xerpi](https://github.com/xerpi) for [vita2dlib](https://github.com/xerpi/vita2dlib)
 - [UrielTapia97](https://twitter.com/UrielTapia97) for the images and icons used in this homebrew
 - [Ruben_Wolfe451](https://twitter.com/Ruben_Wolfe451)
+
+---
+
+†yes, i named it just for the acronym
