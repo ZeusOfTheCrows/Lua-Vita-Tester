@@ -31,17 +31,41 @@
      inkscape:window-height="1421"
      id="namedview92"
      showgrid="false"
-     inkscape:zoom="7.9999999"
-     inkscape:cx="141.91303"
-     inkscape:cy="144.67025"
+     inkscape:zoom="0.99999999"
+     inkscape:cx="581.06438"
+     inkscape:cy="217.551"
      inkscape:window-x="2617"
      inkscape:window-y="-5"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g1158"
+     inkscape:current-layer="g1921"
      inkscape:document-rotation="0"
      inkscape:pagecheckerboard="true" />
   <svg:defs
      id="defs4">
+    <svg:linearGradient
+       id="linearGradient1295"
+       osb:paint="solid">
+      <svg:stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop1293" />
+    </svg:linearGradient>
+    <svg:linearGradient
+       id="linearGradient1284"
+       osb:paint="solid">
+      <svg:stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop1282" />
+    </svg:linearGradient>
+    <svg:linearGradient
+       id="linearGradient1250"
+       osb:paint="solid">
+      <svg:stop
+         style="stop-color:#282828;stop-opacity:1;"
+         offset="0"
+         id="stop1248" />
+    </svg:linearGradient>
     <svg:linearGradient
        id="linearGradient1180">
       <svg:stop
@@ -800,33 +824,6 @@
     <svg:linearGradient
        inkscape:collect="always"
        xlink:href="#dimmed"
-       id="linearGradient1719"
-       x1="110.69717"
-       y1="429.68741"
-       x2="155.7061"
-       y2="429.68741"
-       gradientUnits="userSpaceOnUse" />
-    <svg:linearGradient
-       inkscape:collect="always"
-       xlink:href="#dimmed"
-       id="linearGradient1721"
-       x1="134.18216"
-       y1="494.77097"
-       x2="159.94656"
-       y2="494.77097"
-       gradientUnits="userSpaceOnUse" />
-    <svg:linearGradient
-       inkscape:collect="always"
-       xlink:href="#dimmed"
-       id="linearGradient1723"
-       x1="547.32837"
-       y1="467.07819"
-       x2="587.06812"
-       y2="467.07819"
-       gradientUnits="userSpaceOnUse" />
-    <svg:linearGradient
-       inkscape:collect="always"
-       xlink:href="#dimmed"
        id="linearGradient1729"
        x1="250.50868"
        y1="228.66669"
@@ -1326,6 +1323,26 @@
        x2="205.03659"
        y2="174.43637"
        gradientUnits="userSpaceOnUse" />
+    <svg:linearGradient
+       inkscape:collect="always"
+       xlink:href="#dimmed"
+       id="linearGradient1252"
+       x1="24.259834"
+       y1="353.2533"
+       x2="99.535301"
+       y2="353.2533"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-0.2789387,0.34608137)" />
+    <svg:linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1250"
+       id="linearGradient1297"
+       x1="33.901012"
+       y1="359.75806"
+       x2="109.99588"
+       y2="359.75806"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.491158,0,0,1.324914,-45.668154,-123.04074)" />
   </svg:defs>
   <svg:metadata
      id="metadata7">
@@ -1395,27 +1412,26 @@
        style="display:inline;fill:none;stroke:url(#linearGradient1729);stroke-width:3.14521;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:label="screen" />
     <svg:g
-       transform="matrix(1.8115907,0,0,1.8115907,-88.190072,-596.79691)"
-       id="g4237"
+       transform="matrix(1.8115907,0,0,1.8115907,847.0085,-465.20745)"
+       id="g4224-7-9"
        style="display:none;fill:none;stroke-width:1.73615;stroke-miterlimit:4;stroke-dasharray:none"
-       inkscape:label="r-blobold">
-      <svg:path
-         d="m 586.74128,461.90363 c -5.04029,2.16529 -7.19453,8.41902 -2.11979,17.34472 m -36.73732,-7.30849 c 6.625,-6 14.09383,-7.95456 6.87004,-16.92162"
-         id="path6075-1"
-         style="display:inline;fill:none;stroke:url(#linearGradient1723);stroke-width:1.73615;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         inkscape:connector-curvature="0" />
-      <svg:path
-         d="m 136.64489,486.84282 a 12.462757,12.462757 0 1 0 17.41687,-3.50572"
-         transform="matrix(-2.0871634,0,0,2.063228,869.70066,-525.46689)"
-         id="path6077-5"
-         style="display:inline;fill:none;stroke:url(#linearGradient1721);stroke-width:0.836637;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         inkscape:connector-curvature="0" />
-      <svg:path
-         d="m 146.86356,447.27451 a 22.008699,22.008699 0 1 0 -18.98431,4.10087"
-         transform="matrix(-1.6706827,0,0,1.6706827,800.22467,-292.13603)"
-         id="path5563-32"
-         style="display:inline;fill:none;stroke:url(#linearGradient1719);stroke-width:1.03919;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         inkscape:connector-curvature="0" />
+       inkscape:label="rblob-round">
+      <svg:rect
+         style="opacity:1;fill:url(#linearGradient1297);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.73616;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+         id="rect1291"
+         width="113.46946"
+         height="113.48944"
+         x="4.8836117"
+         y="296.86307"
+         rx="3.4720092"
+         ry="3.4726202" />
+      <svg:ellipse
+         style="display:inline;opacity:1;fill:none;fill-rule:evenodd;stroke:url(#linearGradient1252);stroke-width:1.73616;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+         id="path1246"
+         cx="61.618629"
+         cy="353.59937"
+         rx="36.769653"
+         ry="36.776283" />
     </svg:g>
     <svg:g
        transform="matrix(1.8115907,0,0,1.8115907,847.0085,-465.20745)"
@@ -1887,7 +1903,7 @@
        id="g1330-4"
        inkscape:label="H"
        transform="matrix(0.95391644,0,0,0.9537485,-71.491813,-8.264161)"
-       style="fill:none;stroke-width:1.0484"
+       style="display:none;fill:none;stroke-width:1.0484"
        inkscape:export-filename="D:\ZeusOfTheCrows\My Files\LocalDev\VPad-Tester\src\resources\img\sqr.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
@@ -1908,7 +1924,7 @@
        id="g1333-5"
        inkscape:label="A"
        transform="matrix(0.95391644,0,0,0.9537485,-77.331041,-6.356664)"
-       style="fill:none;stroke-width:1.0484"
+       style="display:none;fill:none;stroke-width:1.0484"
        inkscape:export-filename="D:\ZeusOfTheCrows\My Files\LocalDev\VPad-Tester\src\resources\img\tri.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
@@ -1927,7 +1943,7 @@
        id="g1324-6"
        inkscape:label="X"
        transform="matrix(0.95391644,0,0,0.9537485,-77.331041,-10.171658)"
-       style="fill:none;stroke-width:1.0484"
+       style="display:none;fill:none;stroke-width:1.0484"
        inkscape:export-filename="D:\ZeusOfTheCrows\My Files\LocalDev\VPad-Tester\src\resources\img\crs.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
@@ -2056,11 +2072,15 @@
        transform="matrix(0.95391644,0,0,0.9537485,-77.331041,-8.264161)">
       <svg:g
          id="g1158"
-         inkscape:label="rt">
+         inkscape:label="rt"
+         style="display:inline"
+         inkscape:export-filename="D:\ZeusOfTheCrows\My Files\LocalDev\VPad-Tester\src\resources\img\drt.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
         <svg:path
            d="m 199.83252,154.51522 c -6.11412,0 -20.7303,0.15036 -28.89224,0.15036 -8.63772,8.63767 -14.58227,14.52733 -14.57765,19.7717 0.004,5.06322 6.38352,11.54944 14.69087,19.85685 9.36176,0 22.20462,0.0634 28.7873,0.0634 0.81201,0 3.62318,-3.68478 3.62318,-7.25343 0,-7.53296 -0.0127,-18.8929 -0.0127,-25.34687 -1.13224,-6.5105 -3.61954,-7.24202 -3.61954,-7.24202 z"
            id="path6104-23-6"
-           style="display:inline;fill:url(#linearGradient1182);stroke:url(#linearGradient2051);stroke-width:3.14521;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1.0"
+           style="display:inline;fill:url(#linearGradient1182);fill-opacity:1;stroke:url(#linearGradient2051);stroke-width:3.14521;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            inkscape:connector-curvature="0" />
         <svg:path
            d="m 189.54943,181.2706 v -11.93077 l 5.43477,5.85216 z"
@@ -2070,11 +2090,15 @@
       </svg:g>
       <svg:g
          id="g1154"
-         inkscape:label="lf">
+         inkscape:label="lf"
+         style="display:inline"
+         inkscape:export-filename="D:\ZeusOfTheCrows\My Files\LocalDev\VPad-Tester\src\resources\img\dlf.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
         <svg:path
            d="m 98.1856,194.43398 c 6.11412,0 20.7303,-0.15036 28.89225,-0.15036 8.63771,-8.63766 14.58227,-14.52732 14.57765,-19.77188 -0.004,-5.06321 -6.38352,-11.54925 -14.69088,-19.85666 -9.36176,0 -22.20461,-0.0634 -28.787299,-0.0634 -0.812009,0 -3.623181,3.68459 -3.623181,7.25343 0,7.53277 0.01268,18.8929 0.01268,25.34687 1.132244,6.51049 3.61954,7.24201 3.61954,7.24201 z"
            id="path6104-5-0"
-           style="display:inline;fill:url(#linearGradient1176);stroke:url(#linearGradient2047);stroke-width:3.14521;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1.0"
+           style="display:inline;fill:url(#linearGradient1176);fill-opacity:1;stroke:url(#linearGradient2047);stroke-width:3.14521;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            inkscape:connector-curvature="0" />
         <svg:path
            d="m 109.77311,181.70412 v -11.93078 l -5.43477,5.85217 z"
@@ -2084,11 +2108,15 @@
       </svg:g>
       <svg:g
          id="g1150"
-         inkscape:label="dn">
+         inkscape:label="dn"
+         style="display:inline"
+         inkscape:export-filename="D:\ZeusOfTheCrows\My Files\LocalDev\VPad-Tester\src\resources\img\ddn.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
         <svg:path
            d="m 128.90802,225.22269 c 0,-6.11412 0.15018,-20.73021 0.15018,-28.89215 8.63772,-8.63785 14.52737,-14.5824 19.77181,-14.57769 5.0632,0 11.54938,6.3835 19.85674,14.69091 0,9.36176 0.0638,22.20449 0.0638,28.78727 0,0.81195 -3.6847,3.62318 -7.25345,3.62318 -7.53283,0 -18.89286,-0.0181 -25.34691,-0.0181 -6.5104,-1.13224 -7.24199,-3.61956 -7.24199,-3.61956 z"
            id="path6104-13-0"
-           style="display:inline;fill:url(#linearGradient1170);stroke:url(#linearGradient2045);stroke-width:3.14521;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1.0"
+           style="display:inline;fill:url(#linearGradient1170);fill-opacity:1;stroke:url(#linearGradient2045);stroke-width:3.14521;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            inkscape:connector-curvature="0" />
         <svg:path
            d="m 154.79616,216.63213 h -11.93073 l 5.85214,5.43477 z"
@@ -2098,11 +2126,15 @@
       </svg:g>
       <svg:g
          id="g1146"
-         inkscape:label="up">
+         inkscape:label="up"
+         style="display:inline"
+         inkscape:export-filename="D:\ZeusOfTheCrows\My Files\LocalDev\VPad-Tester\src\resources\img\dup.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
         <svg:path
            d="m 128.78096,123.67995 c 0,6.11412 0.15018,20.73022 0.15018,28.89216 8.63772,8.63766 14.52736,14.58222 19.77181,14.57769 5.0632,0 11.54938,-6.3835 19.85674,-14.69092 0,-9.36175 0.0638,-22.20466 0.0638,-28.78726 0,-0.81195 -3.6847,-3.62318 -7.25344,-3.62318 -7.53283,0 -18.89286,0.0181 -25.34691,0.0181 -6.5104,1.13224 -7.242,3.61955 -7.242,3.61955 z"
            id="path6104-1"
-           style="display:inline;fill:url(#linearGradient1164);stroke:url(#linearGradient2049);stroke-width:3.14521;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1.0"
+           style="display:inline;fill:url(#linearGradient1164);fill-opacity:1;stroke:url(#linearGradient2049);stroke-width:3.14521;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            inkscape:connector-curvature="0" />
         <svg:path
            d="m 142.86513,135.49424 h 11.93073 l -5.85214,-5.43477 z"

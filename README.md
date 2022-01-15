@@ -1,4 +1,4 @@
-# Zeus' Enhanced VPad Snooper
+# Ɀeus' Enhanced VPad Snooper
 
 A simple homebrew for testing the input data on the PS Vita™ made on [Lua Player Plus Vita](https://github.com/Rinnegatamante/lpp-vita)
 
@@ -8,14 +8,15 @@ Originally created by Smoke5, converted to Lua by Keinta15
 
 ### Features:
 
-(most of it's not my work, i just added features (in bold) that i was missing)
+(most of it's not my work, i just added features (in italic) that i was missing)
 
 * highlight currently pressed buttons
 * visual feedback & absolute numbers of analogue stick input
 * visual feedback of touchscreen/touchpad, including multitouch
-* **max range of analogue stick input (useful for adjusting deadzones)**
+* _max range of analogue stick input (useful for adjusting deadzones)_
 * stereo audio tester
-* **is now a “safe” homebrew, as i saw no reason otherwise**
+* _is now a “safe” homebrew, as i saw no reason otherwise_
+* _a better colourscheme ([gruvbox](https://github.com/gruvbox-community/gruvbox))_
 
 ### Dev Miscellany:
 
