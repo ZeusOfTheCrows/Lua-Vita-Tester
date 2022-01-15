@@ -13,6 +13,7 @@ Originally created by Smoke5, converted to Lua by Keinta15
 * visual feedback of touchscreen/touchpad, including multitouch
 * **max range of analogue stick input (useful for adjusting deadzones)**
 * stereo audio tester
+* **is now a “safe” homebrew, as i saw no reason otherwise**
 
 ### Dev Miscellany:
 
@@ -22,6 +23,8 @@ lua player plus' builder is included in .\lpp - read the readme in there, or jus
 
 * i've modified build.bat to zbuild.bat because i'm lazy
 	* use the original if you want to change the name/id
+	* you'll have to mess with directories
+* i'm not quite sure how to affect param.sfo, so i edit it manually with a hex editor
 * this is how i visualise stick range
 
 ![max range logic](./img/max-logic-pic.png)

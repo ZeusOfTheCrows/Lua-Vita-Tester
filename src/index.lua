@@ -1,6 +1,6 @@
 -- ztoto: inverted flat buttons
 -------------------------------------------------------------------------------
---    VitaPad Tester v1.2.0 by ZeusOfTheCrows, based on work by Keinta15     --
+--  Zeus' Enhanced Vita Snooper by ZeusOfTheCrows, based on work by Keinta15 --
 --                        Original work by Smoke5                            --
 -------------------------------------------------------------------------------
 
@@ -10,7 +10,8 @@ Sound.init()
 -- init colors
 white  = Color.new(235, 219, 178, 255)
 orange = Color.new(254, 128, 025, 255)
-red    = Color.new(251, 073, 052, 255)
+red    = Color.new(204, 036, 029, 255)
+green  = Color.new(152, 151, 026, 255)
 grey   = Color.new(189, 174, 147, 255)
 
 -- init images
@@ -39,7 +40,7 @@ Font.setPixelSizes(monoFont, 25)
 
 -- loading sounds
 
-snd1 = Sound.openOgg("app0:/resources/Test.ogg")
+snd1 = Sound.openOgg("app0:/resources/snd/audio-test.ogg")
 hsnd1={hsnd1,hsnd1}
 
 -- init short button names
@@ -84,7 +85,7 @@ end
 function soundTest()
 	for s=1,2 do
 		if hsnd1[s]==nil then
-			hsnd1[s] = Sound.openOgg("app0:/resources/Test.ogg")
+			hsnd1[s] = Sound.openOgg("app0:/resources/snd/audio-test.ogg")
 			Sound.play(hsnd1[s],NOLOOP)
 			break
 		end
@@ -99,14 +100,11 @@ while true do
 	-- init battery stats
 	battpercent = System.getBatteryPercentage()
 	if System.isBatteryCharging() then
-		battcondition = "~"
+		battcolr = green
+	elseif battpercent < 15 then
+		battcolr = red
 	else
-		battcondition = "`"
-	end
-	if battpercent < 15 then
-		battcondcolr = red
-	else
-		battcondcolr = grey
+		battcolr = grey
 	end
 
 	-- update sticks
@@ -120,7 +118,8 @@ while true do
 	rymax = calcMax(ry, rymax)
 
 	-- init/update touch registration
-	tx1, ty1, tx2, ty2, tx3, ty3, tx4, ty4, tx5, ty5, tx6, ty6 = Controls.readTouch()
+	tx1, ty1, tx2, ty2, tx3, ty3, tx4, ty4, tx5, ty5, tx6, ty6 =
+	                                                         Controls.readTouch()
 	rtx1, rty1, rtx2, rty2, rtx4, rty4 = Controls.readRetroTouch()
 
 	for i=1,2 do
@@ -152,14 +151,15 @@ while true do
 	Screen.clear()
 
 	--  Display background
-	Graphics.drawImage(0, 44, bgimg)
+	Graphics.fillRect(0, 0, 960, 544, Color.new(40, 40, 40, 255))
+	Graphics.drawImage(0, 40, bgimg)
 
 	--  Display info
-	Font.print(varwFont, 010, 010, "Lua Vita Tester v1.2.0 by ZeusOfTheCrows", orange)
-	Font.print(varwFont, 195, 080, "Press Start + Select to exit", grey)
-	Font.print(varwFont, 195, 105, "Press L + R to reset max stick range", grey)
-	Font.print(varwFont, 195, 130, "Press X and O for Sound Test", grey)
-	Font.print(monoFont, 700, 080, battcondition .. battpercent .. "%", battcondcolr)
+	Font.print(varwFont, 010, 010, "Enhanced VPad Snooper v1.2.0 by ZeusOfTheCrows", orange)
+	Font.print(varwFont, 200, 080, "Press Start + Select to exit", grey)
+	Font.print(varwFont, 200, 105, "Press L + R to reset max stick range", grey)
+	Font.print(varwFont, 200, 130, "Press X and O for Sound Test", grey)
+	Font.print(monoFont, 710, 080,  battpercent .. "%", battcolr)
 	Font.print(monoFont, 010, 480,  "Left: " .. lPad(lx) .. ", " .. lPad(ly) ..
 	              "\nMax:  " .. lPad(lxmax) .. ", " .. lPad(lymax), white)
 	Font.print(monoFont, 670, 482, "Right: " .. lPad(rx) .. ", " .. lPad(ry) ..
@@ -211,17 +211,20 @@ while true do
 	end
 	--  Draw down directional button if pressed
 	if Controls.check(pad, down) then
-		--Graphics.drawRotateImage(94, 231, dpad, 3.14) couldn't make the intergers to work? I may be dumb
+		--Graphics.drawRotateImage(94, 231, dpad, 3.14)
+		-- couldn't make the intergers to work? I may be dumb
 		Graphics.drawImage(59, 180, downimg)
 	end
 	--  Draw left directional button if pressed
 	if Controls.check(pad, left) then
-		--Graphics.drawRotateImage(65, 203, dpad, -1.57) couldn't make the intergers to work
+		--Graphics.drawRotateImage(65, 203, dpad, -1.57)
+		-- couldn't make the intergers to work
 		Graphics.drawImage(25, 157, leftimg)
 	end
 	--  Draw right directional button if pressed
 	if Controls.check(pad, right) then
-		--Graphics.drawRotateImage(123, 203, dpad, 1.57) couldn't make the intergers to work
+		--Graphics.drawRotateImage(123, 203, dpad, 1.57)
+		-- couldn't make the intergers to work
 		Graphics.drawImage(83, 157, rightimg)
 	end
 
