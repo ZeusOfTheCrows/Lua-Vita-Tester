@@ -4,7 +4,7 @@ A simple homebrew for testing the input data on the PS Vita™ made on [Lua Play
 
 Originally created by Smoke5, converted to Lua by Keinta15
 
-![preview](D:\ZeusOfTheCrows\My Files\LocalDev\VPad-Tester\img\preview.png)
+![preview](./img/preview.png)
 
 ### Features:
 
