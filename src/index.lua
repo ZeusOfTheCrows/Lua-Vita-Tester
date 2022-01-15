@@ -1,6 +1,6 @@
 -- ztodo: fingerprint icon
 -------------------------------------------------------------------------------
---  Zeus' Enhanced Vita Snooper by ZeusOfTheCrows, based on work by Keinta15 --
+--  Ɀeus' Enhanced Vita Snooper by ZeusOfTheCrows, based on work by Keinta15 --
 --                        Original work by Smoke5                            --
 -------------------------------------------------------------------------------
 
@@ -98,7 +98,7 @@ function soundTest()
 	end
 end
 
-----------------------------proper functions ----------------------------------
+------------------------ monolithic functions ---------------------------------
 function drawInfo(pad)
 	-- ui
 	-- Starting drawing phase
@@ -113,8 +113,8 @@ function drawInfo(pad)
 	Font.print(varwFont, 008, 008, "Enhanced VPad Snooper v1.2.0 by ZeusOfTheCrows", orange)
 	Font.print(varwFont, 205, 078, "Press Start + Select to exit", grey)
 	Font.print(varwFont, 205, 103, "Press L + R to reset max stick range", grey)
-	Font.print(varwFont, 205, 128, "Press X and O for Sound Test", grey)
-	-- Font.print(varwFont, 205, 153,  "spare row", grey)
+	Font.print(varwFont, 205, 128, "Press X + O for Sound Test", grey)
+	Font.print(varwFont, 205, 153, "Press Δ + Π for Gyro/Accelerometer [NYI]", grey)
 	Font.print(monoFont, 720, 078,  battpercent .. "%", battcolr)
 	Font.print(monoFont, 010, 480,  "Left: " .. lPad(lx) .. ", " .. lPad(ly) ..
 	                     "\nMax:  " .. lPad(lxmax) .. ", " .. lPad(lymax), white)
@@ -241,7 +241,6 @@ function drawInfo(pad)
 	-- Terminating drawing phase
 	Screen.flip()
 	Graphics.termBlend()
-
 end
 
 function handleControls(pad)
