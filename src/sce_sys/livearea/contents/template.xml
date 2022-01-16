@@ -13,7 +13,7 @@
 		<liveitem>
 			<text valign="bottom" text-valign="bottom" align="left"
 				text-align="left" margin-left="12" margin-bottom="4">
-				<str color="#D65D0E" size="20" shadow="on">ZeusOfTheCrows</str>
+				<str color="#D65D0E" size="24" shadow="on">ZeusOfTheCrows</str>
 			</text>
 			<target>https://zeusofthecrows.github.io/utilities/ps-vita#vpad-tester-and-configurator</target>
 		</liveitem>
@@ -21,10 +21,11 @@
 
 	<frame id="frame4">
 		<liveitem>
-			<text valign="center" text-valign="center" align="center"
-				text-align="center" ellipsis="off" margin-bottom="2">
-				<str color="#FE8019" size="22" bold="on" shadow="on">VPad Tester &amp; Configurator</str>
+			<text valign="top" text-valign="top" align="center"
+				text-align="center" ellipsis="off">
+				<str color="#FE8019" size="30" bold="on" shadow="on">VPad Tester &#xD;&#xA;&amp; Configurator</str>
 			</text>
+			<target>https://zeusofthecrows.github.io/utilities/ps-vita#vpad-tester-and-configurator</target>
 		</liveitem>
 	</frame>
 
@@ -32,7 +33,7 @@
 		<liveitem>
 			<text valign="bottom" text-valign="bottom" align="right"
 				text-align="right" margin-right="12" margin-bottom="4">
-				<str color="#D65D0E" size="20" shadow="on">v1.3.0</str>
+				<str color="#D65D0E" size="24" shadow="on">v1.3.0</str>
 			</text>
 		</liveitem>
 	</frame>

@@ -114,7 +114,7 @@ function drawInfo(pad)
 	Graphics.drawImage(0, 40, bgimg)
 
 	-- Display info
-	Font.print(varwFont, 008, 008, "VPad Tester & Configurator v1.2.0 by ZeusOfTheCrows", orange)
+	Font.print(varwFont, 008, 008, "VPad Tester & Configurator v1.3.0 by ZeusOfTheCrows", orange)
 	Font.print(varwFont, 205, 078, "Press Start + Select to exit", grey)
 	Font.print(varwFont, 205, 103, "Press L + R to reset max stick range", grey)
 	Font.print(varwFont, 205, 128, "Press X + O for Sound Test", grey)
