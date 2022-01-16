@@ -16,7 +16,7 @@ Originally created by Smoke5, converted to Lua by Keinta15
 * _max range of analogue stick input (useful for adjusting deadzones)_
 * stereo audio tester
 * _is now a “safe” homebrew, as i saw no reason otherwise_
-* _a better colourscheme ([gruvbox](https://github.com/gruvbox-community/gruvbox))_
+* _a better colourscheme ([gruvbox dark](https://github.com/gruvbox-community/gruvbox))_
 
 ### Dev Miscellany:
 
