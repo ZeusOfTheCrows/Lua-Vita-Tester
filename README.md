@@ -46,6 +46,7 @@ lua player plus' builder is included in .\lpp - read the readme in there, or jus
 - [xerpi](https://github.com/xerpi) for [vita2dlib](https://github.com/xerpi/vita2dlib)
 - [tokyoship](https://commons.wikimedia.org/wiki/User:Tokyoship) for the [vita wireframe](https://commons.wikimedia.org/wiki/File:PlayStation_Vita_Layout.svg) (CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0))
 - [remix icons](https://remixicon.com/) for the fingerprint icon
+<!-- [pngquant](https://pngquant.org/) for smaller images -->
 - [Ruben_Wolfe451](https://twitter.com/Ruben_Wolfe451)
 
 ---
