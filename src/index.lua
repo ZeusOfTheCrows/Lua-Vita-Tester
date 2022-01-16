@@ -1,3 +1,4 @@
+-- ztodo: red circle primitive radius of max range: "recommended deadzone"
 -------------------------------------------------------------------------------
 --               VPad Tester & Configurator by ⱿeusOfTheCrows                --
 --            based on work by Keinta15 | Original work by Smoke5            --
@@ -44,7 +45,6 @@ Font.setPixelSizes(varwFont, 25)
 Font.setPixelSizes(monoFont, 25)
 
 -- loading sounds
-
 snd1 = Sound.openOgg("app0:/resources/snd/audio-test.ogg")
 hsnd1={hsnd1,hsnd1}
 
@@ -66,7 +66,14 @@ right = SCE_CTRL_RIGHT
 -- init vars to avoid nil
 lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
 lxmax, lymax, rxmax, rymax = 0.0, 0.0, 0.0, 0.0
--- homeButtonLocked = false
+anaencfgfile = System.openFile("ux0:/data/AnalogsEnhancer/config.txt", FRDWR)
+anaencfg = System.readFile(anaencfgfile, 26) -- two bytes spare for "safety"
+anaenprops = {} -- string.split to array
+i = 0 -- what am i doing with my life ztodo
+-- %p is unstable: it matches any punctuation marks
+for p in string.gmatch(anaencfg, "[^%p]+") do
+	table.insert(anaenprops, p)
+end
 
 ------------------------------ mini functions ---------------------------------
 
@@ -91,7 +98,22 @@ function calcMax(currNum, currMax)
 	end
 end
 
--- plays sound (i think)
+-- i hate this language.
+function arrayToString(arrayval)
+	r = ""
+	for i, v in ipairs(arrayval) do
+		-- for first iter don't print preceding ";"
+		if i == 1 then
+			r = r .. v
+		else
+			r = r .. "; " .. v
+		end
+	end
+	return r
+end
+
+
+-- plays sound (i think {not mine})
 function soundTest()
 	for s=1,2 do
 		if hsnd1[s]==nil then
@@ -104,8 +126,10 @@ end
 
 ------------------------ monolithic functions ---------------------------------
 function drawInfo(pad)
-	-- ui
+	-- ztodo: maybe split out into functions called by this one? to avoid rendering issue
 	-- Starting drawing phase
+	-- i'm not sure clearing the screen every frame is the best way to do this
+	-- 		it also breaks psvremap
 	Graphics.initBlend()
 	Screen.clear()
 
@@ -119,43 +143,44 @@ function drawInfo(pad)
 	Font.print(varwFont, 205, 103, "Press L + R to reset max stick range", grey)
 	Font.print(varwFont, 205, 128, "Press X + O for Sound Test", grey)
 	Font.print(varwFont, 205, 153, "Press Δ + Π for Gyro/Accelerometer [NYI]", grey)
+	--                              remove newline from eof
+	Font.print(varwFont, 205, 178,  string.sub(anaencfg, 1, -1) .. arrayToString(anaenprops), grey)
 	Font.print(monoFont, 720, 078,  battpercent .. "%", battcolr)
-	Font.print(monoFont, 010, 480,  "Left: " .. lPad(lx) .. ", " .. lPad(ly) ..
-	                     "\nMax:  " .. lPad(lxmax) .. ", " .. lPad(lymax), white)
+	Font.print(monoFont, 010, 480, "Left: " .. lPad(lx) .. ", " .. lPad(ly) ..
+	                    "\nMax:  " .. lPad(lxmax) .. ", " .. lPad(lymax), white)
 	Font.print(monoFont, 670, 482, "Right: " .. lPad(rx) .. ", " .. lPad(ry) ..
-		                  "\nMax:   " .. lPad(rxmax) .. ", " .. lPad(rymax), white)
+		                "\nMax:   " .. lPad(rxmax) .. ", " .. lPad(rymax), white)
 	-- Screen.flip()
 
 	--[[ bitmask
-	1      select
-	2      ?
-	4      ?
-	8      start
-	16     dpad up
-	32     dpad right
-	64     dpad down
-	128    dpad left
-	256    l trigger
-	512    r trigger
-	1024
-	2048
-	4096   triangle
-	8193   circle
-	16384  cross
-	32768  square
+		1      select
+		2      ?
+		4      ?
+		8      start
+		16     dpad up
+		32     dpad right
+		64     dpad down
+		128    dpad left
+		256    l trigger
+		512    r trigger
+		1024   ?
+		2048   ?
+		4096   triangle
+		8193   circle
+		16384  cross
+		32768  square
 	]]
 
 	--- checks for input
 	-- Draw and move left analog stick on screen
-	Graphics.drawImage((74 + lx / 8), (254 + ly / 8), analogueimg)
-	-- Graphics.drawImage((90), (270), analogueimg)
+	-- default position:  90, 270 (+16px)
+	Graphics.drawImage((74 + lx / 7.5), (254 + ly / 7.5), analogueimg)
 
 	-- Draw and move right analog on screen
-	Graphics.drawImage((794 + rx / 8), (254 + ry / 8), analogueimg)
-	-- Graphics.drawImage((810), (270), analogueimg)
+	-- default position: 810, 270 (+16px)
+	Graphics.drawImage((794 + rx / 7.5), (254 + ry / 7.5), analogueimg)
 
 	--  Draw face buttons if pressed
-
 	if Controls.check(pad, circle) then
 		Graphics.drawImage(888, 169, circleimg)
 	end
