@@ -17,6 +17,7 @@ Originally created by Smoke5, converted to Lua by Keinta15
 * stereo audio tester
 * _is now a “safe” homebrew, as i saw no reason otherwise_
 * _a better colourscheme ([gruvbox dark](https://github.com/gruvbox-community/gruvbox))_
+* _better icon and livearea assets_
 
 ### Dev Miscellany:
 
