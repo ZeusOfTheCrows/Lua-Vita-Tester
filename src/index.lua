@@ -1,4 +1,3 @@
--- ztodo: fingerprint icon
 -------------------------------------------------------------------------------
 --  Ɀeus' Enhanced Vita Snooper by ZeusOfTheCrows, based on work by Keinta15 --
 --                        Original work by Smoke5                            --
@@ -32,6 +31,11 @@ rightimg    = Graphics.loadImage("app0:/resources/img/drt.png")
 analogueimg = Graphics.loadImage("app0:/resources/img/anl.png")
 frontTouch  = Graphics.loadImage("app0:/resources/img/gry.png")
 backTouch   = Graphics.loadImage("app0:/resources/img/blu.png")
+
+-- offsets touch image to account for image size. should be half of resolution
+-- ztodo? could be automatic, see Graphics.getImageWidth/Height(img)
+--              x, y (arrays index from 1...)
+touchoffset = {30, 32}
 
 -- init font
 varwFont = Font.load("app0:/resources/fnt/fir-san-reg.ttf")
@@ -205,37 +209,37 @@ function drawInfo(pad)
 
 	--  Draw front touch on screen
 	if tx1 ~= nil then
-		Graphics.drawImage(tx1- 50,ty1- 56.5, frontTouch)
+		Graphics.drawImage(tx1 - touchoffset[1], ty1 - touchoffset[2], frontTouch)
 	end
 	if tx2 ~= nil then
-		Graphics.drawImage(tx2- 50,ty2- 56.5, frontTouch)
+		Graphics.drawImage(tx2 - touchoffset[1], ty2 - touchoffset[2], frontTouch)
 	end
 	if tx3 ~= nil then
-		Graphics.drawImage(tx3- 50,ty3- 56.5, frontTouch)
+		Graphics.drawImage(tx3 - touchoffset[1], ty3 - touchoffset[2], frontTouch)
 	end
 	if tx4 ~= nil then
-		Graphics.drawImage(tx4- 50,ty4- 56.5, frontTouch)
+		Graphics.drawImage(tx4 - touchoffset[1], ty4 - touchoffset[2], frontTouch)
 	end
 	if tx5 ~= nil then
-		Graphics.drawImage(tx5- 50,ty5- 56.5, frontTouch)
+		Graphics.drawImage(tx5 - touchoffset[1], ty5 - touchoffset[2], frontTouch)
 	end
 	if tx6 ~= nil then
-		Graphics.drawImage(tx6- 50,ty6- 56.5, frontTouch)
+		Graphics.drawImage(tx6 - touchoffset[1], ty6 - touchoffset[2], frontTouch)
 	end
 
 	--  Draw rear touch on screen
 	-- -50 and -56.5 added because image wasn't placed under finger
 	if rtx1 ~= nil then
-		Graphics.drawImage(rtx1- 50,rty1- 113, backTouch)
+		Graphics.drawImage(rtx1 - touchoffset[1], rty1 - touchoffset[2], backTouch)
 	end
 	if rtx2 ~= nil then
-		Graphics.drawImage(rtx2- 50,rty2- 113, backTouch)
+		Graphics.drawImage(rtx2 - touchoffset[1], rty2 - touchoffset[2], backTouch)
 	end
 	if rtx3 ~= nil then
-		Graphics.drawImage(rtx3- 50,rty3- 113, backTouch)
+		Graphics.drawImage(rtx3 - touchoffset[1], rty3 - touchoffset[2], backTouch)
 	end
 	if rtx4 ~= nil then
-		Graphics.drawImage(rtx4- 50,rty4- 113, backTouch)
+		Graphics.drawImage(rtx4 - touchoffset[1], rty4 - touchoffset[2], backTouch)
 	end
 
 	-- Terminating drawing phase
