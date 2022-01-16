@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<livearea style="psmobile" format-ver="01.00" content-rev="1">
+<livearea style="a3" format-ver="01.00" content-rev="1">
 	<livearea-background>
 		<image>bg.png</image>
 	</livearea-background>
@@ -9,26 +9,30 @@
 		<startup-image>startup.png</startup-image>
 	</gate>
 
-	<frame id="frame2">
-		<liveitem>
-			<text valign="bottom" align="left" text-align="left" text-valign="bottom" line-space="3" ellipsis="on">
-				<str color="#EBDBB2" size="50" bold="on" shadow="on">Enhanced VPad Snooper</str>
-			</text>
-		</liveitem>
-	</frame>
-
 	<frame id="frame3">
 		<liveitem>
-			<text valign="top" align="left" text-align="left" text-valign="top" line-space="2" ellipsis="on">
-				<str size="22" shadow="on">by TheFloW</str>
+			<text valign="bottom" text-valign="bottom" align="left"
+				text-align="left" margin-left="12" margin-bottom="4">
+				<str color="#D65D0E" size="24" shadow="on">ZeusOfTheCrows</str>
 			</text>
+			<target>https://zeusofthecrows.github.io/utilities/ps-vita#zeus-enhanced-vpad-snooper</target>
 		</liveitem>
 	</frame>
 
 	<frame id="frame4">
 		<liveitem>
-			<text align="left" text-align="left" word-wrap="off" ellipsis="on">
-				<str size="18" color="#EBDBB2" shadow="on">v1.2.0</str>
+			<text valign="center" text-valign="center" align="center"
+				text-align="center" ellipsis="off" margin-bottom="2">
+				<str color="#FE8019" size="25" bold="on" shadow="on">Enhanced VPad Snooper</str>
+			</text>
+		</liveitem>
+	</frame>
+
+	<frame id="frame5">
+		<liveitem>
+			<text valign="bottom" text-valign="bottom" align="right"
+				text-align="right" margin-right="12" margin-bottom="4">
+				<str color="#D65D0E" size="20" shadow="on">v1.2.0</str>
 			</text>
 		</liveitem>
 	</frame>
