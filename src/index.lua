@@ -1,5 +1,7 @@
--- ztodo: red circle primitive radius of max range: "recommended deadzone"
+-- zdone!: red circle primitive radius of max range: "recommended deadzone"
 -- ztodo: pngquant to shrink image size
+-- ztodo: figure out dpad rotation (smaller vpk size)
+-- ztodo: if you make it unsafe, you can read from ur0:tai/AnaEnCfg.txt - maybe try catch?
 -------------------------------------------------------------------------------
 --               VPad Tester & Configurator by ⱿeusOfTheCrows                --
 --            based on work by Keinta15 | Original work by Smoke5            --
@@ -73,8 +75,15 @@ right = SCE_CTRL_RIGHT
 -- init vars to avoid nil
 lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
 lxmax, lymax, rxmax, rymax = 0.0, 0.0, 0.0, 0.0
-anaencfgfile = System.openFile("ux0:/data/AnalogsEnhancer/config.txt", FRDWR)
+anaencfgfile = 0
+
 -- ztodo: put this in func so it can be called arbitrarily
+--[[if System.doesFileExist("ur0:tai/AnaEnCfg.txt") then
+	anaencfgfile = System.openFile("ur0:tai/AnaEnCfg.txt", FRDWR)
+elseif]]
+if     System.doesFileExist("ux0:data/AnalogsEnhancer/config.txt") then
+	anaencfgfile = System.openFile("ux0:data/AnalogsEnhancer/config.txt", FRDWR)
+end
 anaencfg = System.readFile(anaencfgfile, 26) -- two extra bytes for "safety"
 anaenprops = {}
 -- match set of one or more of all alphanumeric chars (avoid null bytes at eof)
@@ -119,7 +128,6 @@ function arrayToString(arrayval)
 	return r
 end
 
-
 -- plays sound (i think {not mine})
 function soundTest()
 	for s=1,2 do
@@ -132,27 +140,32 @@ function soundTest()
 end
 
 ------------------------ monolithic functions ---------------------------------
-function drawInfo(pad)
+function drawInfo(pad, page)
 	-- ztodo: maybe split out into functions called by this one? to avoid rendering issue
+	-- current page - 0 default, 1 deadzone config
+	page = page or 0
+
 	-- Starting drawing phase
 	-- i'm not sure clearing the screen every frame is the best way to do this
 	-- 		it also breaks psvremap
 	Graphics.initBlend()
 	Screen.clear()
 
-	-- programmatically colour background
+	-- colour background & draw bg image
 	Graphics.fillRect(0, 960, 0, 544, black)
 	Graphics.drawImage(0, 40, bgimg)
 
+	-- draw header info
+	Font.print(varwFont, 008, 004, "VPad Tester & Configurator v1.3.0 by ZeusOfTheCrows", orange)
+	Font.print(monoFont, 904, 004,  battpercent .. "%", battcolr)
+
 	-- Display info
-	Font.print(varwFont, 008, 008, "VPad Tester & Configurator v1.3.0 by ZeusOfTheCrows", orange)
 	Font.print(varwFont, 205, 078, "Press Start + Select to exit", grey)
 	Font.print(varwFont, 205, 103, "Press L + R to reset max stick range", grey)
 	Font.print(varwFont, 205, 128, "Press X + O for Sound Test", grey)
 	Font.print(varwFont, 205, 153, "Press Δ + Π for Gyro/Accelerometer [NYI]", grey)
 	-- debug print
 	Font.print(varwFont, 205, 178,  arrayToString(anaenprops) .. ".", grey)
-	Font.print(monoFont, 720, 078,  battpercent .. "%", battcolr)
 	Font.print(monoFont, 010, 480, "Left: " .. lPad(lx) .. ", " .. lPad(ly) ..
 	                    "\nMax:  " .. lPad(lxmax) .. ", " .. lPad(lymax), white)
 	Font.print(monoFont, 670, 482, "Right: " .. lPad(rx) .. ", " .. lPad(ry) ..
@@ -212,7 +225,8 @@ function drawInfo(pad)
 		Graphics.drawImage(858, 378, sttselctimg)
 	end
 	if Controls.check(pad, home) then
-		Graphics.fillRect(0, 960, 0, 544, Color.new(0, 0, 0))
+		-- this only gets called while the quick settings are shown and the
+		-- home button is enabled - why? (i may as well leave it in though)
 		Graphics.drawImage(087, 376, homeimg)
 	end
 	if Controls.check(pad, ltrigger) then
