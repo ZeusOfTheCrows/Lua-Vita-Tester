@@ -7,9 +7,7 @@
 --            based on work by Keinta15 | Original work by Smoke5            --
 -------------------------------------------------------------------------------
 
--- Initiating Sound Device
-Sound.init()
-
+----------------------------------- globals -----------------------------------
 -- init colors
 white  = Color.new(235, 219, 178)
 orange = Color.new(254, 128, 025)
@@ -20,22 +18,22 @@ grey   = Color.new(189, 174, 147)
 black  = Color.new(040, 040, 040)
 
 -- init images
-bgimg       = Graphics.loadImage("app0:/resources/img/bgd.png")
-crossimg    = Graphics.loadImage("app0:/resources/img/crs.png")
-squareimg   = Graphics.loadImage("app0:/resources/img/sqr.png")
-circleimg   = Graphics.loadImage("app0:/resources/img/ccl.png")
-triangleimg = Graphics.loadImage("app0:/resources/img/tri.png")
-sttselctimg = Graphics.loadImage("app0:/resources/img/ssl.png")
-homeimg     = Graphics.loadImage("app0:/resources/img/hom.png")
-rtriggerimg = Graphics.loadImage("app0:/resources/img/rtr.png")
-ltriggerimg = Graphics.loadImage("app0:/resources/img/ltr.png")
-upimg       = Graphics.loadImage("app0:/resources/img/dup.png")
-downimg     = Graphics.loadImage("app0:/resources/img/ddn.png")
-leftimg     = Graphics.loadImage("app0:/resources/img/dlf.png")
-rightimg    = Graphics.loadImage("app0:/resources/img/drt.png")
-analogueimg = Graphics.loadImage("app0:/resources/img/anl.png")
-frontTouch  = Graphics.loadImage("app0:/resources/img/gry.png")
-backTouch   = Graphics.loadImage("app0:/resources/img/blu.png")
+bgimg       = Graphics.loadImage("app0:resources/img/bgd.png")
+crossimg    = Graphics.loadImage("app0:resources/img/crs.png")
+squareimg   = Graphics.loadImage("app0:resources/img/sqr.png")
+circleimg   = Graphics.loadImage("app0:resources/img/ccl.png")
+triangleimg = Graphics.loadImage("app0:resources/img/tri.png")
+sttselctimg = Graphics.loadImage("app0:resources/img/ssl.png")
+homeimg     = Graphics.loadImage("app0:resources/img/hom.png")
+rtriggerimg = Graphics.loadImage("app0:resources/img/rtr.png")
+ltriggerimg = Graphics.loadImage("app0:resources/img/ltr.png")
+upimg       = Graphics.loadImage("app0:resources/img/dup.png")
+downimg     = Graphics.loadImage("app0:resources/img/ddn.png")
+leftimg     = Graphics.loadImage("app0:resources/img/dlf.png")
+rightimg    = Graphics.loadImage("app0:resources/img/drt.png")
+analogueimg = Graphics.loadImage("app0:resources/img/ana.png")
+frontTouch  = Graphics.loadImage("app0:resources/img/gry.png")
+backTouch   = Graphics.loadImage("app0:resources/img/blu.png")
 
 -- init font
 varwFont = Font.load("app0:/resources/fnt/fir-san-reg.ttf")
@@ -44,16 +42,16 @@ Font.setPixelSizes(varwFont, 25)
 Font.setPixelSizes(monoFont, 25)
 
 -- loading sounds -- ztodo: this is duplicated make funct
-snd1 = Sound.open("app0:/resources/snd/audio-test.ogg")
+Sound.init()
+audiopath = "app0:resources/snd/audio-test.ogg"
+audiofile = Sound.open(audiopath)  -- ztodo: i don't think i need this here
+audioplaying = false  -- declared here so it's global
 hsnd1={hsnd1,hsnd1}
-
---- semantic variables
 
 -- offsets touch image to account for image size. should be half of resolution
 -- ztodo? could be automatic, see Graphics.getImageWidth/Height(img)
 --              x, y (arrays index from 1...)
 touchoffset  = {30, 32}
-
 -- multiplier for analogue stick size
 anasizemulti = 7.5
 
@@ -64,7 +62,7 @@ circle = SCE_CTRL_CIRCLE
 triangle = SCE_CTRL_TRIANGLE
 start = SCE_CTRL_START
 select = SCE_CTRL_SELECT
-home = SCE_CTRL_PSBUTTON  -- not used: can't get it to register if disabled
+home = SCE_CTRL_PSBUTTON  -- not used: see draw function line ~350
 rtrigger = SCE_CTRL_RTRIGGER
 ltrigger = SCE_CTRL_LTRIGGER
 up = SCE_CTRL_UP
@@ -76,12 +74,14 @@ right = SCE_CTRL_RIGHT
 lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
 lxmax, lymax, rxmax, rymax = 0.0, 0.0, 0.0, 0.0
 anaencfgfile = 0
+-- for converting keyread to keydown - updates at end of frame
+padprevframe = 0
 
 -- ztodo: put this in func so it can be called arbitrarily
 --[[if System.doesFileExist("ur0:tai/AnaEnCfg.txt") then
 	anaencfgfile = System.openFile("ur0:tai/AnaEnCfg.txt", FRDWR)
 elseif]]
-if     System.doesFileExist("ux0:data/AnalogsEnhancer/config.txt") then
+if           System.doesFileExist("ux0:data/AnalogsEnhancer/config.txt") then
 	anaencfgfile = System.openFile("ux0:data/AnalogsEnhancer/config.txt", FRDWR)
 end
 anaencfg = System.readFile(anaencfgfile, 26) -- two extra bytes for "safety"
@@ -96,22 +96,11 @@ end
 -- func for padding numbers - to avoid jumping text
 function lPad(str, len, char)
 	-- default arguments
-	len = len or 5 -- 5 because of decimal point
+	len = len or 3
 	char = char or "0"
 	str = tostring(str)
 	if char == nil then char = '' end
 	return string.rep(char, len - #str) .. str
-end
-
--- func for calculating "max" of stick range from 0
-function calcMax(currNum, currMax)
-	num = math.abs(currNum - 127)
-	max = math.abs(currMax)
-	if num > max then
-		return num
-	else
-		return max
-	end
 end
 
 -- i hate this language.
@@ -126,6 +115,36 @@ function arrayToString(arrayval)
 		end
 	end
 	return r
+end
+
+-- func for calculating "max" of stick range from 0
+function calcMax(currNum, currMax)
+	num = math.abs(currNum - 127)
+	max = math.abs(currMax)
+	if num > max then
+		return num
+	else
+		return max
+	end
+end
+
+function toggleAudio()  -- no arguments because it hase to be a global, i think
+	-- /!\ Sound.isPlaying does not work. whether 'tis my bug or native, i don't
+	-- /!\ know, but once toggled twice it always returns false
+	audioplaying = not audioplaying  -- toggle bool
+	if audioplaying then
+		-- i don't think this is great for performance, but i have to Sound.close()
+		-- the file as Sound.pause doesn't properly update Sound.isPlaying()
+		audiofile = Sound.open(audiopath)
+		Sound.play(audiofile)
+	else
+		-- Sound.stop(audiofile)  -- why is this not a valid function? i need it
+		-- pause then close to update Sound.isPlaying(). it doesn't work, and is
+		-- probably unnecessary, but it seems uncouth to close it whilst playing
+		Sound.pause(audiofile)
+		-- close to prevent bug of overlapping audio
+		Sound.close(audiofile)
+	end
 end
 
 -- plays sound (i think {not mine})
@@ -165,7 +184,7 @@ function drawInfo(pad, page)
 	Font.print(varwFont, 205, 128, "Press X + O for Sound Test", grey)
 	Font.print(varwFont, 205, 153, "Press Δ + Π for Gyro/Accelerometer [NYI]", grey)
 	-- debug print
-	Font.print(varwFont, 205, 178,  arrayToString(anaenprops) .. ".", grey)
+	Font.print(varwFont, 205, 178,  "var " .. (audioplaying and "1, " or "0, ") .. "actual " .. (Sound.isPlaying(audiofile) and "1" or "0"), grey)
 	Font.print(monoFont, 010, 480, "Left: " .. lPad(lx) .. ", " .. lPad(ly) ..
 	                    "\nMax:  " .. lPad(lxmax) .. ", " .. lPad(lymax), white)
 	Font.print(monoFont, 670, 482, "Right: " .. lPad(rx) .. ", " .. lPad(ry) ..
@@ -205,7 +224,7 @@ function drawInfo(pad, page)
 	-- default position: 810, 270 (+16px)
 	Graphics.drawImage((793 + rx / 7.5), (252 + ry / 7.5), analogueimg)
 
-	--  Draw face buttons if pressed
+	--  Draw buttons if pressed
 	if Controls.check(pad, circle) then
 		Graphics.drawImage(888, 169, circleimg)
 	end
@@ -298,15 +317,19 @@ function drawInfo(pad, page)
 	Graphics.termBlend()
 end
 
-function handleControls(pad)
+function handleControls(pad, ppf) -- pad prev frame
 	-- reset stick max
 	if Controls.check(pad, ltrigger) and Controls.check(pad, rtrigger) then
 		lxmax, lymax, rxmax, rymax = 0.0, 0.0, 0.0, 0.0
 	end
 
 	-- Sound Testing
-	if Controls.check(pad, cross) and Controls.check(pad, circle) then
-		soundTest()
+	-- this is the mess that comes of not having a keydown event
+	if (Controls.check(pad, cross) and
+	 (Controls.check(pad, circle) and not Controls.check(ppf, circle))) or
+	 (Controls.check(pad, circle) and
+	 (Controls.check(pad, cross) and not Controls.check(ppf, cross))) then
+		toggleAudio()
 	end
 
 	if Controls.check(pad, start) and Controls.check(pad, select) then
@@ -356,15 +379,17 @@ while true do
 	                                                         Controls.readTouch()
 	rtx1, rty1, rtx2, rty2, rtx4, rty4 = Controls.readRetroTouch()
 
-	for i=1,2 do
-		if hsnd1[i] and not Sound.isPlaying(hsnd1[i]) then
-			Sound.close(hsnd1[i])
-			hsnd1[i]=nil
-		end
-	end
+	-- for i=1,2 do
+	-- 	if hsnd1[i] and not Sound.isPlaying(hsnd1[i]) then
+	-- 		Sound.close(hsnd1[i])
+	-- 		hsnd1[i]=nil
+	-- 	end
+	-- end
 
-	handleControls(pad)
+	handleControls(pad, padprevframe)
 
 	drawInfo(pad)
+
+	padprevframe = pad
 
 end
