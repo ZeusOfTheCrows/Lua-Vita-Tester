@@ -41,12 +41,11 @@ monoFont = Font.load("app0:/resources/fnt/fir-cod-reg.ttf")
 Font.setPixelSizes(varwFont, 25)
 Font.setPixelSizes(monoFont, 25)
 
--- loading sounds -- ztodo: this is duplicated make funct
+-- audio related vars
 Sound.init()
 audiopath = "app0:resources/snd/audio-test.ogg"
 audiofile = Sound.open(audiopath)  -- ztodo: i don't think i need this here
 audioplaying = false  -- declared here so it's global
-hsnd1={hsnd1,hsnd1}
 
 -- offsets touch image to account for image size. should be half of resolution
 -- ztodo? could be automatic, see Graphics.getImageWidth/Height(img)
@@ -76,6 +75,8 @@ lxmax, lymax, rxmax, rymax = 0.0, 0.0, 0.0, 0.0
 anaencfgfile = 0
 -- for converting keyread to keydown - updates at end of frame
 padprevframe = 0
+-- current page (0=home, 1=deadzone config, etc.)
+currPage = 0
 
 -- ztodo: put this in func so it can be called arbitrarily
 --[[if System.doesFileExist("ur0:tai/AnaEnCfg.txt") then
@@ -91,7 +92,7 @@ for p in string.gmatch(anaencfg, "[%w]+") do
 	table.insert(anaenprops, p)
 end
 
------------------------------- mini functions ---------------------------------
+---------------------------- function declarations ----------------------------
 
 -- func for padding numbers - to avoid jumping text
 function lPad(str, len, char)
@@ -147,18 +148,7 @@ function toggleAudio()  -- no arguments because it has to be a global, i think
 	end
 end
 
------------------------- monolithic functions ---------------------------------
-function drawInfo(pad, page)
-	-- ztodo: maybe split out into functions called by this one? to avoid rendering issue
-	-- current page - 0 default, 1 deadzone config
-	page = page or 0
-
-	-- Starting drawing phase
-	-- i'm not sure clearing the screen every frame is the best way to do this,
-	-- but it's the only way i know - it also breaks psvremap
-	Graphics.initBlend()
-	Screen.clear()
-
+function drawDecs()  -- draw decorations (title, frame etc.)
 	-- colour background & draw bg image
 	Graphics.fillRect(0, 960, 0, 544, black)
 	Graphics.drawImage(0, 40, bgimg)
@@ -166,7 +156,9 @@ function drawInfo(pad, page)
 	-- draw header info
 	Font.print(varwFont, 008, 004, "VPad Tester & Configurator v1.3.0 by ZeusOfTheCrows", orange)
 	Font.print(monoFont, 904, 004,  battpercent .. "%", battcolr)
+end
 
+function drawHomePage()
 	-- Display info
 	Font.print(varwFont, 205, 078, "Press Start + Select to exit", grey)
 	Font.print(varwFont, 205, 103, "Press L + R to reset max stick range", grey)
@@ -174,11 +166,9 @@ function drawInfo(pad, page)
 	Font.print(varwFont, 205, 153, "Press Δ + Π for Gyro/Accelerometer [NYI]", grey)
 	-- debug print
 	-- Font.print(varwFont, 205, 178, "placeholder", grey)
-	Font.print(monoFont, 010, 480, "Left: " .. lPad(lx) .. ", " .. lPad(ly) ..
-	                    "\nMax:  " .. lPad(lxmax) .. ", " .. lPad(lymax), white)
-	Font.print(monoFont, 670, 482, "Right: " .. lPad(rx) .. ", " .. lPad(ry) ..
-		                "\nMax:   " .. lPad(rxmax) .. ", " .. lPad(rymax), white)
-	-- Screen.flip()  -- this was here before, but i don't think it needs to be?
+end
+
+function drawBtnInput()  -- all digital buttons
 
 	--[[ bitmask
 		1      select
@@ -198,20 +188,6 @@ function drawInfo(pad, page)
 		16384  cross
 		32768  square
 	]]
-
-	--- checks for input
-
-	-- draw recommended deadzones 137, 300
-	Graphics.fillCircle(124, 304, ((math.max(lxmax, lymax) * 0.128) + 35), dred)
-
-	Graphics.fillCircle(844, 304, ((math.max(rxmax, rymax) * 0.128) + 35), dred)
-
-	-- draw and move analogue sticks on screen
-	-- default position:  90, 270 (+16px)
-	Graphics.drawImage((73 + lx / 7.5), (252 + ly / 7.5), analogueimg)
-
-	-- default position: 810, 270 (+16px)
-	Graphics.drawImage((793 + rx / 7.5), (252 + ry / 7.5), analogueimg)
 
 	--  Draw buttons if pressed
 	if Controls.check(pad, circle) then
@@ -265,7 +241,34 @@ function drawInfo(pad, page)
 		-- couldn't make the intergers to work
 		Graphics.drawImage(103, 167, rightimg)
 	end
+end
 
+function drawSticks()  -- fullsize analogue sticks
+	-- draw and move analogue sticks on screen
+	-- default position:  90, 270 (+16px)
+	Graphics.drawImage((73 + lx / 7.5), (252 + ly / 7.5), analogueimg)
+
+	-- default position: 810, 270 (+16px)
+	Graphics.drawImage((793 + rx / 7.5), (252 + ry / 7.5), analogueimg)
+end
+
+function drawStickText()  -- bottom two lines of info numbers
+	Font.print(monoFont, 010, 480, "Left: " .. lPad(lx) .. ", " .. lPad(ly) ..
+	                    "\nMax:  " .. lPad(lxmax) .. ", " .. lPad(lymax), white)
+	Font.print(monoFont, 670, 482, "Right: " .. lPad(rx) .. ", " .. lPad(ry) ..
+		                "\nMax:   " .. lPad(rxmax) .. ", " .. lPad(rymax), white)
+end
+
+function drawMiniSticks()  -- smaller stick circle for deadzone config
+	-- draw recommended deadzones 137, 300
+	Graphics.fillCircle(124, 304, ((math.max(lxmax, lymax) * 0.128) + 35), dred)
+
+	Graphics.fillCircle(844, 304, ((math.max(rxmax, rymax) * 0.128) + 35), dred)
+
+	-- graphics.fillcircle(smaller, basically dots)
+end
+
+function drawTouch()
 	--  Draw front touch on screen
 	if tx1 ~= nil then
 		Graphics.drawImage(tx1 - touchoffset[1], ty1 - touchoffset[2], frontTouch)
@@ -299,6 +302,28 @@ function drawInfo(pad, page)
 	end
 	if rtx4 ~= nil then
 		Graphics.drawImage(rtx4 - touchoffset[1], rty4 - touchoffset[2], backTouch)
+	end  -- fingerprint denoting front/rear touch
+end
+
+function drawInfo(pad, page)  -- main draw function that calls others
+
+	page = page or 0  -- default value for current page
+
+	-- Starting drawing phase
+	-- i'm not sure clearing the screen every frame is the best way to do this,
+	-- but it's the only way i know (it also breaks psvremap)
+	Graphics.initBlend()
+	Screen.clear()
+
+	drawDecs()
+	drawBtnInput()
+	drawStickText()
+	if page == 0 then
+		drawHomePage()
+		drawSticks()
+		drawTouch()
+	elseif page == 1 then
+		drawMiniSticks()
 	end
 
 	-- Terminating drawing phase
@@ -315,10 +340,18 @@ function handleControls(pad, ppf) -- pad prev frame
 	-- Sound Testing
 	-- this is the mess that comes of not having a keydown event
 	if (Controls.check(pad, cross) and
-	 (Controls.check(pad, circle) and not Controls.check(ppf, circle))) or
-	 (Controls.check(pad, circle) and
-	 (Controls.check(pad, cross) and not Controls.check(ppf, cross))) then
+	   (Controls.check(pad, circle) and not Controls.check(ppf, circle))) or
+	   (Controls.check(pad, circle) and
+	   (Controls.check(pad, cross) and not Controls.check(ppf, cross))) then
 		toggleAudio()
+	end
+
+	-- for debug
+	if (Controls.check(pad, square) and
+	   (Controls.check(pad, triangle) and not Controls.check(ppf, triangle))) or
+	   (Controls.check(pad, triangle) and
+	   (Controls.check(pad, square) and not Controls.check(ppf, square))) then
+		currPage = math.abs(currPage - 1)  -- easy 1 0 toggle
 	end
 
 	if Controls.check(pad, start) and Controls.check(pad, select) then
@@ -338,7 +371,7 @@ function handleControls(pad, ppf) -- pad prev frame
 	-- end
 end
 
--- main loop
+---------------------------------- main loop ----------------------------------
 while true do
 
 	pad = Controls.read()
@@ -370,7 +403,7 @@ while true do
 
 	handleControls(pad, padprevframe)
 
-	drawInfo(pad)
+	drawInfo(pad, currPage)
 
 	padprevframe = pad
 
