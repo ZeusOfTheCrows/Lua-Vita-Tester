@@ -2,7 +2,7 @@
 
 A simple homebrew for testing the input data on the PS Vita™ made on [Lua Player Plus Vita](https://github.com/Rinnegatamante/lpp-vita)
 
-Originally created by Smoke5, converted to Lua by Keinta15
+Extended version of a utility created by Smoke5, converted to Lua by Keinta15
 
 ![preview](./img/preview.png)
 
