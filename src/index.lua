@@ -43,8 +43,8 @@ monoFont = Font.load("app0:/resources/fnt/fir-cod-reg.ttf")
 Font.setPixelSizes(varwFont, 25)
 Font.setPixelSizes(monoFont, 25)
 
--- loading sounds
-snd1 = Sound.openOgg("app0:/resources/snd/audio-test.ogg")
+-- loading sounds -- ztodo: this is duplicated make funct
+snd1 = Sound.open("app0:/resources/snd/audio-test.ogg")
 hsnd1={hsnd1,hsnd1}
 
 --- semantic variables
@@ -132,7 +132,7 @@ end
 function soundTest()
 	for s=1,2 do
 		if hsnd1[s]==nil then
-			hsnd1[s] = Sound.openOgg("app0:/resources/snd/audio-test.ogg")
+			hsnd1[s] = Sound.open("app0:/resources/snd/audio-test.ogg")
 			Sound.play(hsnd1[s],NOLOOP)
 			break
 		end
@@ -146,8 +146,8 @@ function drawInfo(pad, page)
 	page = page or 0
 
 	-- Starting drawing phase
-	-- i'm not sure clearing the screen every frame is the best way to do this
-	-- 		it also breaks psvremap
+	-- i'm not sure clearing the screen every frame is the best way to do this,
+	-- but it's the only way i know - it also breaks psvremap
 	Graphics.initBlend()
 	Screen.clear()
 
