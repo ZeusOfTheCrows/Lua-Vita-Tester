@@ -1,4 +1,5 @@
 -- ztodo: red circle primitive radius of max range: "recommended deadzone"
+-- ztodo: pngquant to shrink image size
 -------------------------------------------------------------------------------
 --               VPad Tester & Configurator by ⱿeusOfTheCrows                --
 --            based on work by Keinta15 | Original work by Smoke5            --
@@ -8,12 +9,13 @@
 Sound.init()
 
 -- init colors
-white  = Color.new(235, 219, 178, 255)
-orange = Color.new(254, 128, 025, 255)
-red    = Color.new(204, 036, 029, 255)
-green  = Color.new(152, 151, 026, 255)
-grey   = Color.new(189, 174, 147, 255)
-black  = Color.new(040, 040, 040, 255)
+white  = Color.new(235, 219, 178)
+orange = Color.new(254, 128, 025)
+red    = Color.new(204, 036, 029)
+dred   = Color.new(204, 036, 029, 128)
+green  = Color.new(152, 151, 026)
+grey   = Color.new(189, 174, 147)
+black  = Color.new(040, 040, 040)
 
 -- init images
 bgimg       = Graphics.loadImage("app0:/resources/img/bgd.png")
@@ -33,11 +35,6 @@ analogueimg = Graphics.loadImage("app0:/resources/img/anl.png")
 frontTouch  = Graphics.loadImage("app0:/resources/img/gry.png")
 backTouch   = Graphics.loadImage("app0:/resources/img/blu.png")
 
--- offsets touch image to account for image size. should be half of resolution
--- ztodo? could be automatic, see Graphics.getImageWidth/Height(img)
---              x, y (arrays index from 1...)
-touchoffset = {30, 32}
-
 -- init font
 varwFont = Font.load("app0:/resources/fnt/fir-san-reg.ttf")
 monoFont = Font.load("app0:/resources/fnt/fir-cod-reg.ttf")
@@ -48,7 +45,17 @@ Font.setPixelSizes(monoFont, 25)
 snd1 = Sound.openOgg("app0:/resources/snd/audio-test.ogg")
 hsnd1={hsnd1,hsnd1}
 
--- init short button names
+--- semantic variables
+
+-- offsets touch image to account for image size. should be half of resolution
+-- ztodo? could be automatic, see Graphics.getImageWidth/Height(img)
+--              x, y (arrays index from 1...)
+touchoffset  = {30, 32}
+
+-- multiplier for analogue stick size
+anasizemulti = 7.5
+
+-- short button names
 cross = SCE_CTRL_CROSS
 square = SCE_CTRL_SQUARE
 circle = SCE_CTRL_CIRCLE
@@ -67,11 +74,12 @@ right = SCE_CTRL_RIGHT
 lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
 lxmax, lymax, rxmax, rymax = 0.0, 0.0, 0.0, 0.0
 anaencfgfile = System.openFile("ux0:/data/AnalogsEnhancer/config.txt", FRDWR)
-anaencfg = System.readFile(anaencfgfile, 26) -- two bytes spare for "safety"
-anaenprops = {} -- string.split to array
-i = 0 -- what am i doing with my life ztodo
--- %p is unstable: it matches any punctuation marks
-for p in string.gmatch(anaencfg, "[^%p]+") do
+-- ztodo: put this in func so it can be called arbitrarily
+anaencfg = System.readFile(anaencfgfile, 26) -- two extra bytes for "safety"
+anaenprops = {}
+-- %p is unstable: it matches any punctuation marks - i would rather = | ; | ,
+-- match set of one or more of all alphanumeric chars (avoid null bytes at eof)
+for p in string.gmatch(anaencfg, "[%w]+") do
 	table.insert(anaenprops, p)
 end
 
@@ -143,14 +151,14 @@ function drawInfo(pad)
 	Font.print(varwFont, 205, 103, "Press L + R to reset max stick range", grey)
 	Font.print(varwFont, 205, 128, "Press X + O for Sound Test", grey)
 	Font.print(varwFont, 205, 153, "Press Δ + Π for Gyro/Accelerometer [NYI]", grey)
-	--                              remove newline from eof
-	Font.print(varwFont, 205, 178,  string.sub(anaencfg, 1, -1) .. arrayToString(anaenprops), grey)
+	-- debug print
+	Font.print(varwFont, 205, 178,  arrayToString(anaenprops) .. ".", grey)
 	Font.print(monoFont, 720, 078,  battpercent .. "%", battcolr)
 	Font.print(monoFont, 010, 480, "Left: " .. lPad(lx) .. ", " .. lPad(ly) ..
 	                    "\nMax:  " .. lPad(lxmax) .. ", " .. lPad(lymax), white)
 	Font.print(monoFont, 670, 482, "Right: " .. lPad(rx) .. ", " .. lPad(ry) ..
 		                "\nMax:   " .. lPad(rxmax) .. ", " .. lPad(rymax), white)
-	-- Screen.flip()
+	-- Screen.flip()  -- this was here before, but i don't think it needs to be?
 
 	--[[ bitmask
 		1      select
@@ -172,13 +180,18 @@ function drawInfo(pad)
 	]]
 
 	--- checks for input
-	-- Draw and move left analog stick on screen
-	-- default position:  90, 270 (+16px)
-	Graphics.drawImage((74 + lx / 7.5), (254 + ly / 7.5), analogueimg)
 
-	-- Draw and move right analog on screen
+	-- draw and move analogue sticks on screen
+	-- default position:  90, 270 (+16px)
+	Graphics.drawImage((73 + lx / 7.5), (252 + ly / 7.5), analogueimg)
+
 	-- default position: 810, 270 (+16px)
-	Graphics.drawImage((794 + rx / 7.5), (254 + ry / 7.5), analogueimg)
+	Graphics.drawImage((793 + rx / 7.5), (252 + ry / 7.5), analogueimg)
+
+	-- draw recommended deadzones 137, 300
+	Graphics.fillCircle(124, 304, ((math.max(lxmax, lymax) * 0.128) + 36), dred)
+
+	Graphics.fillCircle(844, 304, ((math.max(rxmax, rymax) * 0.128) + 36), dred)
 
 	--  Draw face buttons if pressed
 	if Controls.check(pad, circle) then

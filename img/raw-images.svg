@@ -31,9 +31,9 @@
      inkscape:window-height="1421"
      id="namedview92"
      showgrid="false"
-     inkscape:zoom="0.99999999"
-     inkscape:cx="380.98998"
-     inkscape:cy="328.48665"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="412.08677"
+     inkscape:cy="291.82539"
      inkscape:window-x="2617"
      inkscape:window-y="-5"
      inkscape:window-maximized="1"
@@ -2033,7 +2033,8 @@
   </svg:g>
   <svg:g
      id="g1182"
-     inkscape:label="logo">
+     inkscape:label="logo"
+     style="display:none">
     <svg:image
        width="280"
        height="158"
