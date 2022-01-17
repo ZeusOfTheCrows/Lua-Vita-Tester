@@ -8,7 +8,7 @@
 -------------------------------------------------------------------------------
 
 ----------------------------------- globals -----------------------------------
--- init colors
+-- global colours
 white  = Color.new(235, 219, 178)
 orange = Color.new(254, 128, 025)
 red    = Color.new(204, 036, 029)
@@ -17,7 +17,7 @@ green  = Color.new(152, 151, 026)
 grey   = Color.new(189, 174, 147)
 black  = Color.new(040, 040, 040)
 
--- init images
+-- load images from files
 bgimg       = Graphics.loadImage("app0:resources/img/bgd.png")
 crossimg    = Graphics.loadImage("app0:resources/img/crs.png")
 squareimg   = Graphics.loadImage("app0:resources/img/sqr.png")
@@ -62,7 +62,7 @@ circle = SCE_CTRL_CIRCLE
 triangle = SCE_CTRL_TRIANGLE
 start = SCE_CTRL_START
 select = SCE_CTRL_SELECT
-home = SCE_CTRL_PSBUTTON  -- not used: see draw function line ~350
+home = SCE_CTRL_PSBUTTON  -- not used: see draw function line ~270
 rtrigger = SCE_CTRL_RTRIGGER
 ltrigger = SCE_CTRL_LTRIGGER
 up = SCE_CTRL_UP
@@ -86,7 +86,7 @@ if           System.doesFileExist("ux0:data/AnalogsEnhancer/config.txt") then
 end
 anaencfg = System.readFile(anaencfgfile, 26) -- two extra bytes for "safety"
 anaenprops = {}
--- match set of one or more of all alphanumeric chars (avoid null bytes at eof)
+-- match set of one or more of all alphanumeric chars (avoid null bytes at end)
 for p in string.gmatch(anaencfg, "[%w]+") do
 	table.insert(anaenprops, p)
 end
@@ -128,13 +128,13 @@ function calcMax(currNum, currMax)
 	end
 end
 
-function toggleAudio()  -- no arguments because it hase to be a global, i think
-	-- /!\ Sound.isPlaying does not work. whether 'tis my bug or native, i don't
-	-- /!\ know, but once toggled twice it always returns false
+function toggleAudio()  -- no arguments because it has to be a global, i think
+	-- /!\ Sound.isPlaying does not work. whether 'tis my bug or native, i do
+	-- /!\ not know; but once toggled twice it always returns false
 	audioplaying = not audioplaying  -- toggle bool
 	if audioplaying then
-		-- i don't think this is great for performance, but i have to Sound.close()
-		-- the file as Sound.pause doesn't properly update Sound.isPlaying()
+		-- i don't think this is great for performance, but i have to Snd.close()
+		-- the file as Sound.pause doesn't consistently pause
 		audiofile = Sound.open(audiopath)
 		Sound.play(audiofile)
 	else
@@ -144,17 +144,6 @@ function toggleAudio()  -- no arguments because it hase to be a global, i think
 		Sound.pause(audiofile)
 		-- close to prevent bug of overlapping audio
 		Sound.close(audiofile)
-	end
-end
-
--- plays sound (i think {not mine})
-function soundTest()
-	for s=1,2 do
-		if hsnd1[s]==nil then
-			hsnd1[s] = Sound.open("app0:/resources/snd/audio-test.ogg")
-			Sound.play(hsnd1[s],NOLOOP)
-			break
-		end
 	end
 end
 
@@ -184,7 +173,7 @@ function drawInfo(pad, page)
 	Font.print(varwFont, 205, 128, "Press X + O for Sound Test", grey)
 	Font.print(varwFont, 205, 153, "Press Δ + Π for Gyro/Accelerometer [NYI]", grey)
 	-- debug print
-	Font.print(varwFont, 205, 178,  "var " .. (audioplaying and "1, " or "0, ") .. "actual " .. (Sound.isPlaying(audiofile) and "1" or "0"), grey)
+	-- Font.print(varwFont, 205, 178, "placeholder", grey)
 	Font.print(monoFont, 010, 480, "Left: " .. lPad(lx) .. ", " .. lPad(ly) ..
 	                    "\nMax:  " .. lPad(lxmax) .. ", " .. lPad(lymax), white)
 	Font.print(monoFont, 670, 482, "Right: " .. lPad(rx) .. ", " .. lPad(ry) ..
@@ -376,15 +365,8 @@ while true do
 
 	-- init/update touch registration
 	tx1, ty1, tx2, ty2, tx3, ty3, tx4, ty4, tx5, ty5, tx6, ty6 =
-	                                                         Controls.readTouch()
+	                                                        Controls.readTouch()
 	rtx1, rty1, rtx2, rty2, rtx4, rty4 = Controls.readRetroTouch()
-
-	-- for i=1,2 do
-	-- 	if hsnd1[i] and not Sound.isPlaying(hsnd1[i]) then
-	-- 		Sound.close(hsnd1[i])
-	-- 		hsnd1[i]=nil
-	-- 	end
-	-- end
 
 	handleControls(pad, padprevframe)
 
