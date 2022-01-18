@@ -61,9 +61,11 @@ anasizemulti = 7.5
 -- global file handle for analogsenhancer config file
 -- anaencfgprops = {}  -- /!\ will change
 anaendbg = ""
--- analogsenhancer config paths in order of priority (array)
--- /!\ if editing order, change return strings too
-anaencfgpaths = {"ux0:data/AnalogsEnhancer/config.txt", "ur0:tai/AnaEnCfg.txt"}
+-- analogsenhancer config paths. oh look, it's a 2d array because fuck you
+anaencfgpaths ={
+{"ur0:tai/AnaEnCfg.txt", "config loaded for ur0: mod"},
+{"ux0:data/AnalogsEnhancer/config.txt", "config loaded for default plugin"}
+}
 
 -- short button names
 cross = SCE_CTRL_CROSS
@@ -87,20 +89,6 @@ lxmax, lymax, rxmax, rymax = 0.0, 0.0, 0.0, 0.0  -- /!\ will change
 padprevframe = 0  -- /!\ will change
 -- current page (0=home, 1=deadzone config, etc.)
 currPage = 0  -- /!\ will change
-
--- ztodo: put this in func so it can be called arbitrarily
---[[if System.doesFileExist("ur0:tai/AnaEnCfg.txt") then
-	anaencfgfile = System.openFile("ur0:tai/AnaEnCfg.txt", FRDWR)
-elseif]]
--- if           System.doesFileExist("ux0:data/AnalogsEnhancer/config.txt") then
-	-- anaencfgfile = System.openFile("ux0:data/AnalogsEnhancer/config.txt", FRDWR)
--- end
--- anaencfg = System.readFile(anaencfgfile, 26) -- two extra bytes for "safety"
--- anaenprops = {}
--- match set of one or more of all alphanumeric chars (avoid null bytes at end)
--- for p in string.gmatch(anaencfg, "[%w]+") do
-	-- table.insert(anaenprops, p)
--- end
 
 ---------------------------- function declarations ----------------------------
 
@@ -143,28 +131,28 @@ function calcMax(currNum, currMax)  -- calculating "max" of stick range from 0
 end
 
 function openFile(filepaths)  -- find existing file and return, or return false
-	for i, file in ipairs(filepaths) do
+	for i, value in ipairs(filepaths) do
+		file = value[1]
 		if System.doesFileExist(file) then
-			return System.openFile(file, FRDWR)
+			return System.openFile(file, FRDWR), value[2]
 		end
 	end
-	return false
+	return false, "cannot find file: is plugin installed?"
 end
 
 
 function parseCfgFile(filepaths)  -- read config file and return info (check)
 	anaenprops = {}
-	file = openFile(filepaths)
+	file, output = openFile(filepaths)
 	if file then
 		file = System.readFile(file, System.sizeFile(file))
-		-- match set of one or more of all alphanumeric chars (avoid null bytes at end)
+		-- match set of one or more of all alphanumeric chars
 		for p in string.gmatch(file, "[%w]+") do
 			table.insert(anaenprops, p)
 		end
-		return anaenprops
+		return anaenprops, output
 	else
-		return "cannot find file: is plugin installed?"
-	-- return false, "AnalogsEnhancer config file not found. is plugin installed?", ""  -- text too long
+		return false, output
 	end
 end
 
@@ -311,13 +299,13 @@ end
 
 function drawMiniSticks()  -- smaller stick circle for deadzone config
 	-- draw recommended deadzones 137, 300
-	Graphics.fillCircle(124, 304, ((math.max(lxmax, lymax) * 0.256) + 4), dred)
-	Graphics.fillCircle(844, 304, ((math.max(rxmax, rymax) * 0.256) + 4), dred)
+	Graphics.fillCircle(124, 304, ((math.max(lxmax, lymax) * 0.3) + 4), dred)
+	Graphics.fillCircle(844, 304, ((math.max(rxmax, rymax) * 0.3) + 4), dred)
 
-	-- default position: 124, 304 (-(128/4†)) †stick movement multiplier
-	Graphics.fillCircle((092 + lx / 4), (272 + ly / 4), 4, bright)
+	-- default position: 124, 304 (-(128/3.33†)) †stick movement multiplier
+	Graphics.fillCircle((086 + lx / 3.33), (266 + ly / 3.33), 4, bright)
 	-- default position: 844, 304
-	Graphics.fillCircle((812 + rx / 4), (272 + ry / 4), 4, bright)
+	Graphics.fillCircle((806 + rx / 3.33), (266 + ry / 3.33), 4, bright)
 end
 
 function drawTouch()
@@ -407,7 +395,7 @@ function homePageCtrls(pad, ppf) -- ppf = pad prev frame
 	   (Controls.check(pad, triangle) and
 	   (Controls.check(pad, square) and not Controls.check(ppf, square))) then
 		currPage = 1
-		anaendbg = parseCfgFile(anaencfgpaths)
+		anaendbg, dzstatus = parseCfgFile(anaencfgpaths)
 	end
 
 	if Controls.check(pad, start) and Controls.check(pad, select) then
@@ -457,7 +445,8 @@ while true do
 	                                                        Controls.readTouch()
 	rtx1, rty1, rtx2, rty2, rtx4, rty4 = Controls.readRetroTouch()
 
-	-- debug, remove dzstatus =
+	dzstatus = ""  -- localscope for now
+
 	homePageCtrls(pad, padprevframe)
 
 	drawInfo(pad, currPage, dzstatus)
