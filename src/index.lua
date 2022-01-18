@@ -1,6 +1,5 @@
 -- zdone!: red circle primitive radius of max range: "recommended deadzone"
 -- ztodo: pngquant to shrink image size
--- ztodo: figure out dpad rotation (smaller vpk size)
 -- ztodo: if you make it unsafe, you can read from ur0:tai/AnaEnCfg.txt - maybe try catch?
 -------------------------------------------------------------------------------
 --               VPad Tester & Configurator by ⱿeusOfTheCrows                --
@@ -10,6 +9,7 @@
 ----------------------------------- globals -----------------------------------
 -- global colours
 white  = Color.new(235, 219, 178)
+bright = Color.new(251, 241, 199)
 orange = Color.new(254, 128, 025)
 red    = Color.new(204, 036, 029)
 dred   = Color.new(204, 036, 029, 128)
@@ -43,6 +43,7 @@ Font.setPixelSizes(monoFont, 25)
 
 -- audio related vars
 Sound.init()
+-- i think it's polish: "kanał lewy, kanał prawy" (left channel, right channel)
 audiopath = "app0:resources/snd/audio-test.ogg"
 audiofile = Sound.open(audiopath)  -- ztodo: i don't think i need this here
 audioplaying = false  -- declared here so it's global
@@ -202,6 +203,7 @@ function drawBtnInput()  -- all digital buttons
 	if Controls.check(pad, square) then
 		Graphics.drawImage(812, 169, squareimg)
 	end
+
 	if Controls.check(pad, select) then
 		Graphics.drawImage(807, 378, sttselctimg)
 	end
@@ -213,43 +215,42 @@ function drawBtnInput()  -- all digital buttons
 		-- home button is enabled - why? (i may as well leave it in though)
 		Graphics.drawImage(087, 376, homeimg)
 	end
+
 	if Controls.check(pad, ltrigger) then
 		Graphics.drawImage(68, 43, ltriggerimg)
 	end
 	if Controls.check(pad, rtrigger) then
 		Graphics.drawImage(775, 43, rtriggerimg)
 	end
-	--  Draw up directional button if pressed   x113, y91
+
+	-- i don't use drawRotateImage due a bug (probably in vita2d) that draws the
+	-- images incorrectly (fuzzy broken borders, misplaced pixels). if you're
+	-- editing this in the future, check if it's been fixed
 	if Controls.check(pad, up) then
+		-- Graphics.drawRotateImage(97, 158, upimg, 0)
 		Graphics.drawImage(77, 134, upimg)
 	end
-	--  Draw down directional button if pressed
 	if Controls.check(pad, down) then
-		--Graphics.drawRotateImage(94, 231, dpad, 3.14)
-		-- couldn't make the intergers to work? I may be dumb
+		-- Graphics.drawRotateImage(98, 216, upimg, 3.141593)
 		Graphics.drawImage(77, 193, downimg)
 	end
-	--  Draw left directional button if pressed
 	if Controls.check(pad, left) then
-		--Graphics.drawRotateImage(65, 203, dpad, -1.57)
-		-- couldn't make the intergers to work
+		-- Graphics.drawRotateImage(69, 188, upimg, 4.712389)
 		Graphics.drawImage(44, 167, leftimg)
 	end
-	--  Draw right directional button if pressed
 	if Controls.check(pad, right) then
-		--Graphics.drawRotateImage(123, 203, dpad, 1.57)
-		-- couldn't make the intergers to work
+		-- Graphics.drawRotateImage(128, 187, upimg, 1.570796)
 		Graphics.drawImage(103, 167, rightimg)
 	end
 end
 
 function drawSticks()  -- fullsize analogue sticks
 	-- draw and move analogue sticks on screen
-	-- default position:  90, 270 (+16px)
-	Graphics.drawImage((73 + lx / 7.5), (252 + ly / 7.5), analogueimg)
+	-- default position: 90, 270 (-(128/anasizemulti)
+	Graphics.drawImage((73 + lx / anasizemulti), (252 + ly / anasizemulti), analogueimg)
 
-	-- default position: 810, 270 (+16px)
-	Graphics.drawImage((793 + rx / 7.5), (252 + ry / 7.5), analogueimg)
+	-- default position: 810, 270
+	Graphics.drawImage((793 + rx / anasizemulti), (252 + ry / anasizemulti), analogueimg)
 end
 
 function drawStickText()  -- bottom two lines of info numbers
@@ -261,11 +262,13 @@ end
 
 function drawMiniSticks()  -- smaller stick circle for deadzone config
 	-- draw recommended deadzones 137, 300
-	Graphics.fillCircle(124, 304, ((math.max(lxmax, lymax) * 0.128) + 35), dred)
+	Graphics.fillCircle(124, 304, ((math.max(lxmax, lymax) * 0.256) + 4), dred)
+	Graphics.fillCircle(844, 304, ((math.max(rxmax, rymax) * 0.256) + 4), dred)
 
-	Graphics.fillCircle(844, 304, ((math.max(rxmax, rymax) * 0.128) + 35), dred)
-
-	-- graphics.fillcircle(smaller, basically dots)
+	-- default position: 124, 304 (-(128/4)
+	Graphics.fillCircle((092 + lx / 4), (272 + ly / 4), 4, bright)
+	-- default position: 844, 304
+	Graphics.fillCircle((812 + rx / 4), (272 + ry / 4), 4, bright)
 end
 
 function drawTouch()
