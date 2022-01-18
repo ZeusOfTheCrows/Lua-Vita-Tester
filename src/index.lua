@@ -1,12 +1,16 @@
 -- zdone!: red circle primitive radius of max range: "recommended deadzone"
 -- ztodo: pngquant to shrink image size
 -- ztodo: if you make it unsafe, you can read from ur0:tai/AnaEnCfg.txt - maybe try catch?
+-- ztodo: change package name? ZVPTSTCFG (zeus' vpad tester & configurator)
 -------------------------------------------------------------------------------
 --               VPad Tester & Configurator by ⱿeusOfTheCrows                --
 --            based on work by Keinta15 | Original work by Smoke5            --
 -------------------------------------------------------------------------------
 
 ----------------------------------- globals -----------------------------------
+-- globals marked "/!\ will change" are manipulated in code. i know it's bad
+-- practice, but i find it makes more sense
+
 -- global colours
 white  = Color.new(235, 219, 178)
 bright = Color.new(251, 241, 199)
@@ -35,7 +39,7 @@ analogueimg = Graphics.loadImage("app0:resources/img/ana.png")
 frontTouch  = Graphics.loadImage("app0:resources/img/gry.png")
 backTouch   = Graphics.loadImage("app0:resources/img/blu.png")
 
--- init font
+-- load fonts
 varwFont = Font.load("app0:/resources/fnt/fir-san-reg.ttf")
 monoFont = Font.load("app0:/resources/fnt/fir-cod-reg.ttf")
 Font.setPixelSizes(varwFont, 25)
@@ -45,8 +49,8 @@ Font.setPixelSizes(monoFont, 25)
 Sound.init()
 -- i think it's polish: "kanał lewy, kanał prawy" (left channel, right channel)
 audiopath = "app0:resources/snd/audio-test.ogg"
-audiofile = Sound.open(audiopath)  -- ztodo: i don't think i need this here
-audioplaying = false  -- declared here so it's global
+audiofile = 0  -- /!\ will change -- ztodo: i don't think i need this here
+audioplaying = false  -- /!\ will change - declared here so it's global
 
 -- offsets touch image to account for image size. should be half of resolution
 -- ztodo? could be automatic, see Graphics.getImageWidth/Height(img)
@@ -54,6 +58,12 @@ audioplaying = false  -- declared here so it's global
 touchoffset  = {30, 32}
 -- multiplier for analogue stick size
 anasizemulti = 7.5
+-- global file handle for analogsenhancer config file
+-- anaencfgprops = {}  -- /!\ will change
+anaendbg = ""
+-- analogsenhancer config paths in order of priority (array)
+-- /!\ if editing order, change return strings too
+anaencfgpaths = {"ux0:data/AnalogsEnhancer/config.txt", "ur0:tai/AnaEnCfg.txt"}
 
 -- short button names
 cross = SCE_CTRL_CROSS
@@ -71,32 +81,30 @@ left = SCE_CTRL_LEFT
 right = SCE_CTRL_RIGHT
 
 -- init vars to avoid nil
-lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
-lxmax, lymax, rxmax, rymax = 0.0, 0.0, 0.0, 0.0
-anaencfgfile = 0
+lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0  -- /!\ will change
+lxmax, lymax, rxmax, rymax = 0.0, 0.0, 0.0, 0.0  -- /!\ will change
 -- for converting keyread to keydown - updates at end of frame
-padprevframe = 0
+padprevframe = 0  -- /!\ will change
 -- current page (0=home, 1=deadzone config, etc.)
-currPage = 0
+currPage = 0  -- /!\ will change
 
 -- ztodo: put this in func so it can be called arbitrarily
 --[[if System.doesFileExist("ur0:tai/AnaEnCfg.txt") then
 	anaencfgfile = System.openFile("ur0:tai/AnaEnCfg.txt", FRDWR)
 elseif]]
-if           System.doesFileExist("ux0:data/AnalogsEnhancer/config.txt") then
-	anaencfgfile = System.openFile("ux0:data/AnalogsEnhancer/config.txt", FRDWR)
-end
-anaencfg = System.readFile(anaencfgfile, 26) -- two extra bytes for "safety"
-anaenprops = {}
+-- if           System.doesFileExist("ux0:data/AnalogsEnhancer/config.txt") then
+	-- anaencfgfile = System.openFile("ux0:data/AnalogsEnhancer/config.txt", FRDWR)
+-- end
+-- anaencfg = System.readFile(anaencfgfile, 26) -- two extra bytes for "safety"
+-- anaenprops = {}
 -- match set of one or more of all alphanumeric chars (avoid null bytes at end)
-for p in string.gmatch(anaencfg, "[%w]+") do
-	table.insert(anaenprops, p)
-end
+-- for p in string.gmatch(anaencfg, "[%w]+") do
+	-- table.insert(anaenprops, p)
+-- end
 
 ---------------------------- function declarations ----------------------------
 
--- func for padding numbers - to avoid jumping text
-function lPad(str, len, char)
+function lPad(str, len, char)  -- for padding numbers, to avoid jumping text
 	-- default arguments
 	len = len or 3
 	char = char or "0"
@@ -105,28 +113,56 @@ function lPad(str, len, char)
 	return string.rep(char, len - #str) .. str
 end
 
--- i hate this language.
-function arrayToString(arrayval)
-	r = ""
-	for i, v in ipairs(arrayval) do
-		-- for first iter don't print preceding ";"
-		if i == 1 then
-			r = r .. v
-		else
-			r = r .. "; " .. v
+function arrayToString(arrayval)  -- i hate this language.
+	if type(arrayval) == "string" then
+		return arrayval
+	else
+		r = ""
+		for i, v in ipairs(arrayval) do
+			-- for first iter don't print preceding ";"
+			if i == 1 then
+				r = r .. v
+			else
+				r = r .. "; " .. v
+			end
 		end
+		return r
 	end
-	return r
 end
 
--- func for calculating "max" of stick range from 0
-function calcMax(currNum, currMax)
+function calcMax(currNum, currMax)  -- calculating "max" of stick range from 0
 	num = math.abs(currNum - 127)
 	max = math.abs(currMax)
 	if num > max then
 		return num
 	else
 		return max
+	end
+end
+
+function openFile(filepaths)  -- find existing file and open
+	for i, file in ipairs(filepaths) do
+		if System.doesFileExist(file) then
+			return System.openFile(file, FRDWR)
+		end
+	end
+	return false
+end
+
+
+function parseCfgFile(filepaths)  -- read config file and return info (check)
+	anaenprops = {}
+	file = openFile(filepaths)
+	if file then
+		file = System.readFile(file, System.sizeFile(file))
+		-- match set of one or more of all alphanumeric chars (avoid null bytes at end)
+		for p in string.gmatch(file, "[%w]+") do
+			table.insert(anaenprops, p)
+		end
+		return anaenprops
+	else
+		return "cannot find file: is plugin installed?"
+	-- return false, "AnalogsEnhancer config file not found. is plugin installed?", ""  -- text too long
 	end
 end
 
@@ -165,6 +201,16 @@ function drawHomePage()
 	Font.print(varwFont, 205, 103, "Press L + R to reset max stick range", grey)
 	Font.print(varwFont, 205, 128, "Press X + O for Sound Test", grey)
 	Font.print(varwFont, 205, 153, "Press Δ + Π for Gyro/Accelerometer [NYI]", grey)
+	-- debug print
+	-- Font.print(varwFont, 205, 178, "placeholder", grey)
+end
+
+function drawDZPage(statustext)  -- draw deadzone config page
+	-- Display info
+	Font.print(varwFont, 205, 078, arrayToString(statustext), grey)
+	-- Font.print(varwFont, 205, 103, "Press L + R to reset max stick range", grey)
+	-- Font.print(varwFont, 205, 128, "Press X + O for Sound Test", grey)
+	-- Font.print(varwFont, 205, 153, "Press Δ + Π for Gyro/Accelerometer [NYI]", grey)
 	-- debug print
 	-- Font.print(varwFont, 205, 178, "placeholder", grey)
 end
@@ -265,7 +311,7 @@ function drawMiniSticks()  -- smaller stick circle for deadzone config
 	Graphics.fillCircle(124, 304, ((math.max(lxmax, lymax) * 0.256) + 4), dred)
 	Graphics.fillCircle(844, 304, ((math.max(rxmax, rymax) * 0.256) + 4), dred)
 
-	-- default position: 124, 304 (-(128/4)
+	-- default position: 124, 304 (-(128/4†)) †stick movement multiplier
 	Graphics.fillCircle((092 + lx / 4), (272 + ly / 4), 4, bright)
 	-- default position: 844, 304
 	Graphics.fillCircle((812 + rx / 4), (272 + ry / 4), 4, bright)
@@ -308,7 +354,10 @@ function drawTouch()
 	end  -- fingerprint denoting front/rear touch
 end
 
-function drawInfo(pad, page)  -- main draw function that calls others
+------------------------------ caller functions -------------------------------
+---------------- (functions that call other smaller functions) ----------------
+
+function drawInfo(pad, page, dzstatus)  -- main draw function that calls others
 
 	page = page or 0  -- default value for current page
 
@@ -326,6 +375,7 @@ function drawInfo(pad, page)  -- main draw function that calls others
 		drawSticks()
 		drawTouch()
 	elseif page == 1 then
+		drawDZPage(anaendbg)
 		drawMiniSticks()
 	end
 
@@ -334,7 +384,7 @@ function drawInfo(pad, page)  -- main draw function that calls others
 	Graphics.termBlend()
 end
 
-function handleControls(pad, ppf) -- pad prev frame
+function homePageCtrls(pad, ppf) -- ppf = pad prev frame
 	-- reset stick max
 	if Controls.check(pad, ltrigger) and Controls.check(pad, rtrigger) then
 		lxmax, lymax, rxmax, rymax = 0.0, 0.0, 0.0, 0.0
@@ -349,12 +399,12 @@ function handleControls(pad, ppf) -- pad prev frame
 		toggleAudio()
 	end
 
-	-- for debug
 	if (Controls.check(pad, square) and
 	   (Controls.check(pad, triangle) and not Controls.check(ppf, triangle))) or
 	   (Controls.check(pad, triangle) and
 	   (Controls.check(pad, square) and not Controls.check(ppf, square))) then
-		currPage = math.abs(currPage - 1)  -- easy 1 0 toggle
+		currPage = 1
+		anaendbg = parseCfgFile(anaencfgpaths)
 	end
 
 	if Controls.check(pad, start) and Controls.check(pad, select) then
@@ -404,9 +454,10 @@ while true do
 	                                                        Controls.readTouch()
 	rtx1, rty1, rtx2, rty2, rtx4, rty4 = Controls.readRetroTouch()
 
-	handleControls(pad, padprevframe)
+	-- debug, remove dzstatus =
+	homePageCtrls(pad, padprevframe)
 
-	drawInfo(pad, currPage)
+	drawInfo(pad, currPage, dzstatus)
 
 	padprevframe = pad
 
