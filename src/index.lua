@@ -113,7 +113,9 @@ function lPad(str, len, char)  -- for padding numbers, to avoid jumping text
 	return string.rep(char, len - #str) .. str
 end
 
-function arrayToString(arrayval)  -- i hate this language.
+function arrayToString(arrayval, sepchars)  -- i hate this language.
+	sepchars = sepchars or "; "
+	-- check if is already string (not necessary, but saves headaches)
 	if type(arrayval) == "string" then
 		return arrayval
 	else
@@ -123,7 +125,7 @@ function arrayToString(arrayval)  -- i hate this language.
 			if i == 1 then
 				r = r .. v
 			else
-				r = r .. "; " .. v
+				r = r .. sepchars .. v
 			end
 		end
 		return r
@@ -140,7 +142,7 @@ function calcMax(currNum, currMax)  -- calculating "max" of stick range from 0
 	end
 end
 
-function openFile(filepaths)  -- find existing file and open
+function openFile(filepaths)  -- find existing file and return, or return false
 	for i, file in ipairs(filepaths) do
 		if System.doesFileExist(file) then
 			return System.openFile(file, FRDWR)
@@ -171,7 +173,7 @@ function toggleAudio()  -- no arguments because it has to be a global, i think
 	-- /!\ not know; but once toggled twice it always returns false
 	audioplaying = not audioplaying  -- toggle bool
 	if audioplaying then
-		-- i don't think this is great for performance, but i have to Snd.close()
+		-- i don't think this is great for performance, but i have to Sound.close
 		-- the file as Sound.pause doesn't consistently pause
 		audiofile = Sound.open(audiopath)
 		Sound.play(audiofile)
@@ -205,9 +207,10 @@ function drawHomePage()
 	-- Font.print(varwFont, 205, 178, "placeholder", grey)
 end
 
-function drawDZPage(statustext)  -- draw deadzone config page
+function drawDZPage(statustext, statuscolour)  -- draw deadzone config page
+	statuscolour = grey or statuscolour
 	-- Display info
-	Font.print(varwFont, 205, 078, arrayToString(statustext), grey)
+	Font.print(varwFont, 205, 078, arrayToString(statustext), statuscolour)
 	-- Font.print(varwFont, 205, 103, "Press L + R to reset max stick range", grey)
 	-- Font.print(varwFont, 205, 128, "Press X + O for Sound Test", grey)
 	-- Font.print(varwFont, 205, 153, "Press Δ + Π for Gyro/Accelerometer [NYI]", grey)
