@@ -1,5 +1,11 @@
 # VPad Tester & Configurator
 
+**/!\ Moved here. this repo is deprecated/!\\**
+
+i think enough of this has changed that there's almost none of the original code left. therefore, i've moved it to it's own repo, [available here](https://github.com/ZeusOfTheCrows/vpad-tester-and-configurator)
+
+---
+
 A simple homebrew for testing the input data on the PS Vita™ made on [Lua Player Plus Vita](https://github.com/Rinnegatamante/lpp-vita)
 
 Extended version of a utility created by Smoke5, converted to Lua by Keinta15
