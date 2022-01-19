@@ -1,11 +1,10 @@
--- zdone!: red circle primitive radius of max range: "recommended deadzone"
--- ztodo: pngquant to shrink image size
--- ztodo: if you make it unsafe, you can read from ur0:tai/AnaEnCfg.txt - maybe try catch?
--- ztodo: change package name? ZVPTSTCFG (zeus' vpad tester & configurator)
 -------------------------------------------------------------------------------
 --               VPad Tester & Configurator by ⱿeusOfTheCrows                --
 --            based on work by Keinta15 | Original work by Smoke5            --
 -------------------------------------------------------------------------------
+
+-- ztodo: pngquant to shrink image size
+-- ztodo: change package name? ZVPTSTCFG (zeus' vpad tester & configurator)
 
 ----------------------------------- globals -----------------------------------
 -- globals marked "/!\ will change" are manipulated in code. i know it's bad
@@ -31,19 +30,19 @@ sttselctimg = Graphics.loadImage("app0:resources/img/ssl.png")
 homeimg     = Graphics.loadImage("app0:resources/img/hom.png")
 rtriggerimg = Graphics.loadImage("app0:resources/img/rtr.png")
 ltriggerimg = Graphics.loadImage("app0:resources/img/ltr.png")
-upimg       = Graphics.loadImage("app0:resources/img/dup.png")
-downimg     = Graphics.loadImage("app0:resources/img/ddn.png")
-leftimg     = Graphics.loadImage("app0:resources/img/dlf.png")
-rightimg    = Graphics.loadImage("app0:resources/img/drt.png")
+dpupimg     = Graphics.loadImage("app0:resources/img/dup.png")
+dpdownimg   = Graphics.loadImage("app0:resources/img/ddn.png")
+dpleftimg   = Graphics.loadImage("app0:resources/img/dlf.png")
+dprightimg  = Graphics.loadImage("app0:resources/img/drt.png")
 analogueimg = Graphics.loadImage("app0:resources/img/ana.png")
 frontTouch  = Graphics.loadImage("app0:resources/img/gry.png")
 backTouch   = Graphics.loadImage("app0:resources/img/blu.png")
 
 -- load fonts
-varwFont = Font.load("app0:/resources/fnt/fir-san-reg.ttf")
-monoFont = Font.load("app0:/resources/fnt/fir-cod-reg.ttf")
-Font.setPixelSizes(varwFont, 25)
-Font.setPixelSizes(monoFont, 25)
+varwFont = Font.load("app0:/resources/fnt/fir-san-reg.ttf")  -- variable width
+monoFont = Font.load("app0:/resources/fnt/fir-cod-reg.ttf")  -- monospace
+Font.setPixelSizes(varwFont, 24)
+Font.setPixelSizes(monoFont, 24)
 
 -- audio related vars
 Sound.init()
@@ -54,7 +53,7 @@ audioplaying = false  -- /!\ will change - declared here so it's global
 
 -- offsets touch image to account for image size. should be half of resolution
 -- ztodo? could be automatic, see Graphics.getImageWidth/Height(img)
---              x, y (arrays index from 1...)
+--               x, y (arrays index from 1...)
 touchoffset  = {30, 32}
 -- multiplier for analogue stick size
 anasizemulti = 7.5
@@ -68,19 +67,19 @@ anaencfgpaths ={
 }
 
 -- short button names
-cross = SCE_CTRL_CROSS
-square = SCE_CTRL_SQUARE
-circle = SCE_CTRL_CIRCLE
+cross    = SCE_CTRL_CROSS
+square   = SCE_CTRL_SQUARE
+circle   = SCE_CTRL_CIRCLE
 triangle = SCE_CTRL_TRIANGLE
-start = SCE_CTRL_START
-select = SCE_CTRL_SELECT
-home = SCE_CTRL_PSBUTTON  -- not used: see draw function line ~270
+start    = SCE_CTRL_START
+select   = SCE_CTRL_SELECT
+home     = SCE_CTRL_PSBUTTON  -- not used: see draw function line ~270
 rtrigger = SCE_CTRL_RTRIGGER
 ltrigger = SCE_CTRL_LTRIGGER
-up = SCE_CTRL_UP
-down = SCE_CTRL_DOWN
-left = SCE_CTRL_LEFT
-right = SCE_CTRL_RIGHT
+dpup     = SCE_CTRL_UP
+dpdown   = SCE_CTRL_DOWN
+dpleft   = SCE_CTRL_LEFT
+dpright  = SCE_CTRL_RIGHT
 
 -- init vars to avoid nil
 lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0  -- /!\ will change
@@ -101,7 +100,9 @@ function lPad(str, len, char)  -- for padding numbers, to avoid jumping text
 	return string.rep(char, len - #str) .. str
 end
 
-function arrayToString(arrayval, sepchars)  -- i hate this language.
+function arrayToStr(arrayval, sepchars)  -- i hate this language.
+	-- i know table.concat exists, but this doesn't have a tizz when told to
+	-- concatenate a string (advanced programming i know)
 	sepchars = sepchars or "; "
 	-- check if is already string (not necessary, but saves headaches)
 	if type(arrayval) == "string" then
@@ -134,12 +135,11 @@ function openFile(filepaths)  -- find existing file and return, or return false
 	for i, value in ipairs(filepaths) do
 		file = value[1]
 		if System.doesFileExist(file) then
-			return System.openFile(file, FRDWR), value[2]
+			return System.openFile(file, FREAD), value[2]
 		end
 	end
 	return false, "cannot find file: is plugin installed?"
 end
-
 
 function parseCfgFile(filepaths)  -- read config file and return info (check)
 	anaenprops = {}
@@ -150,6 +150,7 @@ function parseCfgFile(filepaths)  -- read config file and return info (check)
 		for p in string.gmatch(file, "[%w]+") do
 			table.insert(anaenprops, p)
 		end
+		-- System.closeFile(file)
 		return anaenprops, output
 	else
 		return false, output
@@ -181,16 +182,17 @@ function drawDecs()  -- draw decorations (title, frame etc.)
 	Graphics.drawImage(0, 40, bgimg)
 
 	-- draw header info
-	Font.print(varwFont, 008, 004, "VPad Tester & Configurator v1.3.0 by ZeusOfTheCrows", orange)
+	Font.print(varwFont, 008, 004,
+		"VPad Tester & Configurator v1.3.0 by ZeusOfTheCrows", orange)
 	Font.print(monoFont, 904, 004,  battpercent .. "%", battcolr)
 end
 
 function drawHomePage()
 	-- Display info
-	Font.print(varwFont, 205, 078, "Press Start + Select to exit", grey)
-	Font.print(varwFont, 205, 103, "Press L + R to reset max stick range", grey)
-	Font.print(varwFont, 205, 128, "Press X + O for Sound Test", grey)
-	Font.print(varwFont, 205, 153, "Press Δ + Π for Gyro/Accelerometer [NYI]", grey)
+	Font.print(varwFont, 205, 078, "press Start + Select to exit", grey)
+	Font.print(varwFont, 205, 103, "press L + R to reset max stick range", grey)
+	Font.print(varwFont, 205, 128, "press X + O for audio test", grey)
+	Font.print(varwFont, 205, 153, "press Δ + Π for deadzone config", grey)
 	-- debug print
 	-- Font.print(varwFont, 205, 178, "placeholder", grey)
 end
@@ -198,10 +200,10 @@ end
 function drawDZPage(statustext, statuscolour)  -- draw deadzone config page
 	statuscolour = grey or statuscolour
 	-- Display info
-	Font.print(varwFont, 205, 078, arrayToString(statustext), statuscolour)
-	-- Font.print(varwFont, 205, 103, "Press L + R to reset max stick range", grey)
+	Font.print(varwFont, 205, 078, arrayToStr(statustext, "; "), statuscolour)
+	-- Font.print(varwFont, 205, 103, arrayToStr("test", ", "), grey)
 	-- Font.print(varwFont, 205, 128, "Press X + O for Sound Test", grey)
-	-- Font.print(varwFont, 205, 153, "Press Δ + Π for Gyro/Accelerometer [NYI]", grey)
+	-- Font.print(varwFont, 205, 153, "placeholder", grey)
 	-- debug print
 	-- Font.print(varwFont, 205, 178, "placeholder", grey)
 end
@@ -263,31 +265,37 @@ function drawBtnInput()  -- all digital buttons
 	-- i don't use drawRotateImage due a bug (probably in vita2d) that draws the
 	-- images incorrectly (fuzzy broken borders, misplaced pixels). if you're
 	-- editing this in the future, check if it's been fixed
-	if Controls.check(pad, up) then
-		-- Graphics.drawRotateImage(97, 158, upimg, 0)
-		Graphics.drawImage(77, 134, upimg)
+	if Controls.check(pad, dpup) then
+		-- Graphics.drawRotateImage(97, 158, dpupimg, 0)
+		Graphics.drawImage(77, 134, dpupimg)
 	end
-	if Controls.check(pad, down) then
-		-- Graphics.drawRotateImage(98, 216, upimg, 3.141593)
-		Graphics.drawImage(77, 193, downimg)
+	if Controls.check(pad, dpdown) then
+		-- Graphics.drawRotateImage(98, 216, dpupimg, 3.141593)
+		Graphics.drawImage(77, 193, dpdownimg)
 	end
-	if Controls.check(pad, left) then
-		-- Graphics.drawRotateImage(69, 188, upimg, 4.712389)
-		Graphics.drawImage(44, 167, leftimg)
+	if Controls.check(pad, dpleft) then
+		-- Graphics.drawRotateImage(69, 188, dpupimg, 4.712389)
+		Graphics.drawImage(44, 167, dpleftimg)
 	end
-	if Controls.check(pad, right) then
-		-- Graphics.drawRotateImage(128, 187, upimg, 1.570796)
-		Graphics.drawImage(103, 167, rightimg)
+	if Controls.check(pad, dpright) then
+		-- Graphics.drawRotateImage(128, 187, dpupimg, 1.570796)
+		Graphics.drawImage(103, 167, dprightimg)
 	end
 end
 
 function drawSticks()  -- fullsize analogue sticks
 	-- draw and move analogue sticks on screen
 	-- default position: 90, 270 (-(128/anasizemulti)
-	Graphics.drawImage((73 + lx / anasizemulti), (252 + ly / anasizemulti), analogueimg)
+	Graphics.drawImage(
+		(073+(lx/anasizemulti)),
+		(252+(ly/anasizemulti)),
+		analogueimg)
 
 	-- default position: 810, 270
-	Graphics.drawImage((793 + rx / anasizemulti), (252 + ry / anasizemulti), analogueimg)
+	Graphics.drawImage(
+		(793+(rx/anasizemulti)),
+		(252+(ry/anasizemulti)),
+		analogueimg)
 end
 
 function drawStickText()  -- bottom two lines of info numbers
@@ -308,41 +316,38 @@ function drawMiniSticks()  -- smaller stick circle for deadzone config
 	Graphics.fillCircle((806 + rx / 3.33), (266 + ry / 3.33), 4, bright)
 end
 
-function drawTouch()
-	--  Draw front touch on screen
+function drawTouch()  -- fingerprint denoting front/rear touch
 	if tx1 ~= nil then
-		Graphics.drawImage(tx1 - touchoffset[1], ty1 - touchoffset[2], frontTouch)
+		Graphics.drawImage(tx1-touchoffset[1], ty1-touchoffset[2], frontTouch)
 	end
 	if tx2 ~= nil then
-		Graphics.drawImage(tx2 - touchoffset[1], ty2 - touchoffset[2], frontTouch)
+		Graphics.drawImage(tx2-touchoffset[1], ty2-touchoffset[2], frontTouch)
 	end
 	if tx3 ~= nil then
-		Graphics.drawImage(tx3 - touchoffset[1], ty3 - touchoffset[2], frontTouch)
+		Graphics.drawImage(tx3-touchoffset[1], ty3-touchoffset[2], frontTouch)
 	end
 	if tx4 ~= nil then
-		Graphics.drawImage(tx4 - touchoffset[1], ty4 - touchoffset[2], frontTouch)
+		Graphics.drawImage(tx4-touchoffset[1], ty4-touchoffset[2], frontTouch)
 	end
 	if tx5 ~= nil then
-		Graphics.drawImage(tx5 - touchoffset[1], ty5 - touchoffset[2], frontTouch)
+		Graphics.drawImage(tx5-touchoffset[1], ty5-touchoffset[2], frontTouch)
 	end
 	if tx6 ~= nil then
-		Graphics.drawImage(tx6 - touchoffset[1], ty6 - touchoffset[2], frontTouch)
+		Graphics.drawImage(tx6-touchoffset[1], ty6-touchoffset[2], frontTouch)
 	end
 
-	--  Draw rear touch on screen
-	-- -50 and -56.5 added because image wasn't placed under finger
 	if rtx1 ~= nil then
-		Graphics.drawImage(rtx1 - touchoffset[1], rty1 - touchoffset[2], backTouch)
+		Graphics.drawImage(rtx1-touchoffset[1], rty1-touchoffset[2], backTouch)
 	end
 	if rtx2 ~= nil then
-		Graphics.drawImage(rtx2 - touchoffset[1], rty2 - touchoffset[2], backTouch)
+		Graphics.drawImage(rtx2-touchoffset[1], rty2-touchoffset[2], backTouch)
 	end
 	if rtx3 ~= nil then
-		Graphics.drawImage(rtx3 - touchoffset[1], rty3 - touchoffset[2], backTouch)
+		Graphics.drawImage(rtx3-touchoffset[1], rty3-touchoffset[2], backTouch)
 	end
 	if rtx4 ~= nil then
-		Graphics.drawImage(rtx4 - touchoffset[1], rty4 - touchoffset[2], backTouch)
-	end  -- fingerprint denoting front/rear touch
+		Graphics.drawImage(rtx4-touchoffset[1], rty4-touchoffset[2], backTouch)
+	end
 end
 
 ------------------------------ caller functions -------------------------------
